@@ -22,7 +22,7 @@ export default {
 		return {};
 	},
 	provide: {
-		__imgRoot: __imgPath + "topic/welcome/",
+		__imgRoot: __imgPath + "topic/exam/",
 	},
 	computed: {
 		page_name: function () {

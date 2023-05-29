@@ -1,0 +1,81 @@
+body {
+    background-color: #fff;
+}
+
+.m-index {
+    .r(20px);
+    .clip;
+    margin: 104px auto 40px auto;
+    max-width: 1200px;
+    min-height: 100vh;
+    background: url("@{kv_exam}logo.svg") 60px 60px #555090 no-repeat;
+}
+
+.m-header {
+    .pr;
+    .h(513px);
+    .u-text {
+        .pa;
+        &-1 {
+            .w(750px);
+            .rt(-10px, 6px);
+        }
+        &-2 {
+            .lt(86px,248px);
+            .w(495px);
+        }
+    }
+}
+
+.m-exam {
+    .pb(80px);
+    background: url("@{kv_exam}grid.svg?123") top center no-repeat;
+    .m-title {
+        .flex;
+        padding: 24px 0 84px 0;
+        gap: 25px;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    .u-show-title {
+        .size(285px,73px);
+        .x;
+        .r(10px);
+        .lh(73px);
+        .bold;
+        .fz(48px);
+        .mr(24px);
+        color: #555090;
+        background-color: #fff;
+        border: 4px solid #ffe353;
+    }
+    .m-title-box {
+        .flex;
+        .size(464px,160px);
+        gap: 27px;
+        flex-wrap: wrap;
+        padding: 12px 17px;
+        box-sizing: border-box;
+        background: url("@{kv_exam}box.svg") center center no-repeat;
+        .u-title {
+            .size(125px,54px);
+            .r(10px);
+            .pointer;
+            .x;
+            .bold;
+            .lh(54px);
+            .fz(20px);
+            letter-spacing: 2px;
+            color: #fff;
+            background-color: #555090;
+        }
+    }
+    .m-content {
+        .r(30px);
+        padding: 30px;
+        box-sizing:border-box;
+        margin: 0 80px;
+        background-color: #fff;
+        min-height: 1000px;
+    }
+}
