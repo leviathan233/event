@@ -1,5 +1,6 @@
 body {
     background-color: #fff;
+    min-width: 1200px;
 }
 
 .m-index {
@@ -29,7 +30,7 @@ body {
 
 .m-exam {
     .pb(80px);
-    background: url("@{kv_exam}grid.svg?123") top center no-repeat;
+    background: url("@{kv_exam}grid.svg") top center no-repeat;
     .m-title {
         .flex;
         padding: 24px 0 84px 0;
@@ -65,6 +66,7 @@ body {
             .bold;
             .lh(54px);
             .fz(20px);
+            user-select: none;
             letter-spacing: 2px;
             color: #fff;
             background-color: #555090;
@@ -73,9 +75,13 @@ body {
     .m-content {
         .r(30px);
         padding: 30px;
-        box-sizing:border-box;
+        box-sizing: border-box;
         margin: 0 80px;
         background-color: #fff;
         min-height: 1000px;
     }
+}
+
+.el-loading-mask {
+    .r(30px);
 }
