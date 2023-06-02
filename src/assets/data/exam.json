@@ -3,37 +3,51 @@
         "1": {
             "key": "115",
             "name": "理综卷",
-            "color": "#555090"
+            "color": "#555090",
+            "font": "#555090",
+            "background": "#FFE353"
         },
         "2": {
             "key": "113",
             "name": "文综卷",
-            "color": "#264E70"
+            "color": "#264E70",
+            "font": "#264E70",
+            "background": "#BBD4CE"
         },
         "3": {
             "key": "99",
             "name": "PVE卷",
-            "color": "#AE7897"
+            "color": "#AE7897",
+            "font": "#fff",
+            "background": "#F9C397"
         },
         "4": {
             "key": "101",
             "name": "PVP卷",
-            "color": "#27104E"
+            "color": "#27104E",
+            "font": "#fff",
+            "background": "#AE7897"
         },
         "5": {
             "key": "102",
             "name": "PVX卷",
-            "color": "#264E70"
+            "color": "#264E70",
+            "font": "#fff",
+            "background": "#F9B4AB"
         },
         "6": {
             "key": "108",
             "name": "PVP通识",
-            "color": "#6B2A27"
+            "color": "#6B2A27",
+            "font": "#fff",
+            "background": "#F9B4AB"
         },
         "7": {
             "key": "100",
             "name": "缘起综合",
-            "color": "#543C52"
+            "color": "#543C52",
+            "font": "#fff",
+            "background": "#F55951"
         }
     },
     "tags": [

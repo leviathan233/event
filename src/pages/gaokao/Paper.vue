@@ -25,9 +25,8 @@
 </template>
 
 <script>
-    import { postStat } from "@jx3box/jx3box-common/js/stat.js";
     import ExamCard from "./ExamCard.vue";
-    import { getPaper, submitAnswer } from "@/service/exam.js";
+    import { submitAnswer } from "@/service/exam.js";
     import User from "@jx3box/jx3box-common/js/user";
     export default {
         name: "Paper",
@@ -36,7 +35,6 @@
         components: { ExamCard },
         data: function () {
             return {
-                data: {},
                 list: [],
                 answer: "",
                 score: "",
@@ -54,33 +52,20 @@
             name() {
                 return this.paper.name;
             },
+            data() {
+                return this.paper.data;
+            },
+        },
+        watch: {
+            "paper.list": {
+                deep: true,
+                immediate: true,
+                handler: function (list) {
+                    this.list = list;
+                },
+            },
         },
         methods: {
-            loadData() {
-                getPaper(this.id).then((res) => {
-                    let data = res.data;
-
-                    // 发送统计
-                    postStat("paper", this.id);
-
-                    data.tags = JSON.parse(data.tags);
-                    data.questionDetailList =
-                        data?.questionDetailList?.map((item) => {
-                            item.options = JSON.parse(item.options);
-                            item.tags = JSON.parse(item.tags);
-
-                            return item;
-                        }) || [];
-                    this.data = data;
-
-                    this.list =
-                        data?.questionDetailList?.map((item) => {
-                            return {
-                                list: item,
-                            };
-                        }) || [];
-                });
-            },
             finalAnswer(val) {
                 this.userAnswers = {
                     ...this.userAnswers,
@@ -126,9 +111,7 @@
                 }
             },
         },
-        mounted() {
-            this.loadData();
-        },
+
     };
 </script>
 

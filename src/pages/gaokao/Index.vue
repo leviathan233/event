@@ -1,5 +1,5 @@
 <template>
-    <div class="p-event">
+    <div class="p-event-content">
         <div class="m-paper-box" :style="{ backgroundColor: showColor }">
             <span class="u-title">切换试卷</span>
             <div class="m-list">
@@ -8,11 +8,15 @@
                 </span>
             </div>
         </div>
-        <Paper v-for="(item, key) in type" :key="key" :paper="item" />
+        <div :class="`m-paper m-paper-${key}`" v-for="(item, key) in paperList" :key="key">
+            <Paper :paper="item" />
+        </div>
     </div>
 </template>
 
 <script>
+    import { postStat } from "@jx3box/jx3box-common/js/stat.js";
+    import { getPaper } from "@/service/exam.js";
     import { type } from "@/assets/data/exam.json";
     import { cloneDeep } from "lodash";
     import Paper from "./Paper.vue";
@@ -23,8 +27,8 @@
         data: function () {
             return {
                 type,
-                showId: "1",
-                year: "2023",
+                typeList: {},
+                showId: 1,
             };
         },
 
@@ -32,22 +36,61 @@
             showColor() {
                 return this.type[this.showId].color;
             },
-            typeList() {
-                const obj = cloneDeep(this.type);
-                delete obj[this.showId];
-                Object.keys(obj).forEach((item) => {
-                    if (item == this.showId) obj[item] = obj[this.showId];
-                });
-                return obj;
+            paperList() {
+                const last = this.showId - 1 == 0 ? Object.keys(this.type).length : this.showId - 1;
+                return {
+                    1: this.typeList[last],
+                    2: this.typeList[this.showId],
+                    3: this.typeList[this.showId + 1],
+                };
+            },
+        },
+        watch: {
+            type: {
+                immediate: true,
+                handler: function (obj) {
+                    this.typeList = cloneDeep(obj);
+                },
             },
         },
         methods: {
+            loadData() {
+                Object.keys(this.type).forEach((type) => {
+                    const id = this.type[type].key;
+                    getPaper(id).then((res) => {
+                        let data = res.data;
+
+                        // 发送统计
+                        postStat("paper", id);
+
+                        data.tags = JSON.parse(data.tags);
+                        data.questionDetailList =
+                            data?.questionDetailList?.map((item) => {
+                                item.options = JSON.parse(item.options);
+                                item.tags = JSON.parse(item.tags);
+
+                                return item;
+                            }) || [];
+                        this.typeList[type].data = data;
+
+                        this.typeList[type].list =
+                            data?.questionDetailList?.map((item) => {
+                                return {
+                                    list: item,
+                                };
+                            }) || [];
+                    });
+                });
+            },
             changeExam(i) {
                 this.showId = i;
             },
             jump(i) {
                 console.log(i);
             },
+        },
+        mounted() {
+            this.loadData();
         },
     };
 </script>

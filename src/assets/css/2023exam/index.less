@@ -2,10 +2,52 @@ body {
     min-width: 1200px;
     background-color: #fff;
 }
+.p-event-content {
+    .flex;
+    margin: 0 auto;
+    width: 100%;
+    width: 1200px;
+    min-height: 100vh;
+    .m-mark {
+        .full;
+        .pa;
+        .z(1);
+    }
+    .m-paper {
+        .w(100%);
+        .pa;
+        top: 0;
+        .m-index {
+            .none;
+        }
+
+        &-2 {
+            left: 0;
+            .z(1);
+            .m-index {
+                .db;
+            }
+        }
+        &-3 {
+            left: 1260px;
+            .m-index {
+                .db;
+            }
+        }
+        &-1 {
+            left: -1260px;
+            .m-index {
+                .db;
+            }
+        }
+    }
+}
+
 @font: #555090;
 .m-index {
     .r(20px);
     .clip;
+    flex-shrink: 0;
     margin: 104px auto 40px auto;
     max-width: 1200px;
     min-height: 100vh;
