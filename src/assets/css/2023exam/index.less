@@ -1,17 +1,53 @@
 body {
-    background-color: #fff;
     min-width: 1200px;
+    background-color: #fff;
 }
-
+@font: #555090;
 .m-index {
     .r(20px);
     .clip;
     margin: 104px auto 40px auto;
     max-width: 1200px;
     min-height: 100vh;
-    background: url("@{kv_exam}logo.svg") 60px 60px #555090 no-repeat;
+    background: url("@{kv_exam}logo.svg") 60px 60px no-repeat;
 }
-
+.m-paper-box {
+    .pf;
+    .rt(0,50%);
+    .w(128px);
+    .z(9);
+    .flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    .u-title {
+        .w(1em);
+        color: #fff;
+        user-select: none;
+    }
+    .m-list {
+        .flex;
+        flex-direction: column;
+        gap: 10px;
+        .u-paper {
+            .flex;
+            .size(84px,28px);
+            .r(5px);
+            .bold;
+            .pointer;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            color: @font;
+            &.active {
+                background-color: #ffe353;
+            }
+        }
+    }
+}
 .m-header {
     .pr;
     .h(513px);
@@ -29,49 +65,24 @@ body {
 }
 
 .m-exam {
+    .flex;
+    flex-direction: column;
     .pb(80px);
     background: url("@{kv_exam}grid.svg") top center no-repeat;
     .m-title {
-        .flex;
-        padding: 24px 0 84px 0;
-        gap: 25px;
-        flex-direction: column;
-        align-items: flex-end;
-    }
-    .u-show-title {
         .size(285px,73px);
         .x;
         .r(10px);
         .lh(73px);
         .bold;
         .fz(48px);
-        .mr(24px);
-        color: #555090;
+        align-self: flex-end;
+        margin: 24px 24px 48px 0;
+        color: @font;
         background-color: #fff;
         border: 4px solid #ffe353;
     }
-    .m-title-box {
-        .flex;
-        .size(464px,160px);
-        gap: 27px;
-        flex-wrap: wrap;
-        padding: 12px 17px;
-        box-sizing: border-box;
-        background: url("@{kv_exam}box.svg") center center no-repeat;
-        .u-title {
-            .size(125px,54px);
-            .r(10px);
-            .pointer;
-            .x;
-            .bold;
-            .lh(54px);
-            .fz(20px);
-            user-select: none;
-            letter-spacing: 2px;
-            color: #fff;
-            background-color: #555090;
-        }
-    }
+
     .m-content {
         .r(30px);
         padding: 30px;

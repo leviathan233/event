@@ -1,30 +1,33 @@
 <template>
-    <div class="m-index">
-        <div class="m-header">
-            <img :src="__imgRoot + 'text2.svg'" class="u-text u-text-1" alt="全力以赴" />
-            <img :src="__imgRoot + 'text.svg'" class="u-text u-text-2" alt="2023剑三高考卷" />
-        </div>
-        <div class="m-exam">
-            <div class="m-title">
-                <div class="u-show-title">{{ showName }}</div>
-                <div class="m-title-box">
-                    <span class="u-title" v-for="(item, i) in typeList" :key="i" @click="changeExam(i)">
-                        {{ item.name }}
-                    </span>
-                </div>
+    <div class="p-event">
+        <div class="m-paper-box" :style="{ backgroundColor: showColor }">
+            <span class="u-title">切换试卷</span>
+            <div class="m-list">
+                <span v-for="(item, i) in type" :key="i" :class="['u-paper', { active: showId == i }]">{{
+                    item.name
+                }}</span>
             </div>
-            <div class="m-content" v-loading="loading">
-                <ExamCard
-                    v-for="(item, index) in list"
-                    :key="item.id"
-                    :item="item.list"
-                    :index="index + 1"
-                    :answer="item.answer"
-                    :isSubmitted="isSubmitted"
-                    @changeVal="finalAnswer"
-                />
-                <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }">
-                    <el-button class="u-btn" :disabled="isSubmitted">提交</el-button>
+        </div>
+        <div class="m-index" :style="{ backgroundColor: item.color }" v-for="(item, key) in type" :key="key">
+            <div class="m-header">
+                <img :src="__imgRoot + 'text2.svg'" class="u-text u-text-1" alt="全力以赴" />
+                <img :src="__imgRoot + 'text.svg'" class="u-text u-text-2" alt="2023剑三高考卷" />
+            </div>
+            <div class="m-exam">
+                <div class="m-title">{{ showName }}</div>
+                <div class="m-content" v-loading="loading">
+                    <ExamCard
+                        v-for="(item, index) in list"
+                        :key="item.id"
+                        :item="item.list"
+                        :index="index + 1"
+                        :answer="item.answer"
+                        :isSubmitted="isSubmitted"
+                        @changeVal="finalAnswer"
+                    />
+                    <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }">
+                        <el-button class="u-btn" :disabled="isSubmitted">提交</el-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,6 +49,7 @@
             return {
                 type,
                 showId: "1",
+                year: "2023",
 
                 data: {},
                 list: [],
@@ -63,6 +67,9 @@
             },
             showName() {
                 return this.type[this.showId].name;
+            },
+            showColor() {
+                return this.type[this.showId].color;
             },
             typeList() {
                 const obj = cloneDeep(this.type);
