@@ -1,11 +1,11 @@
 <template>
-    <div class="m-index" :style="{ backgroundColor: color }">
+    <div class="m-index" :style="{ backgroundColor: color }" v-loading="loading">
         <div class="m-header">
             <img :src="__imgRoot + 'text2.svg'" class="u-text u-text-1" alt="全力以赴" />
             <img :src="__imgRoot + 'text.svg'" class="u-text u-text-2" alt="2023剑三高考卷" />
         </div>
         <div class="m-exam">
-            <div class="m-title">{{ name }}</div>
+            <div class="m-title" :style="{ color: font, background }">{{ name }}</div>
             <div class="m-content">
                 <ExamCard
                     v-for="(item, index) in list"
@@ -14,6 +14,9 @@
                     :index="index + 1"
                     :answer="item.answer"
                     :isSubmitted="isSubmitted"
+                    :background="background"
+                    :font="font"
+                    :color="color"
                     @changeVal="finalAnswer"
                 />
                 <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }">
@@ -25,47 +28,81 @@
 </template>
 
 <script>
+    import { postStat } from "@jx3box/jx3box-common/js/stat.js";
     import ExamCard from "./ExamCard.vue";
-    import { submitAnswer } from "@/service/exam.js";
+    import { submitAnswer, getPaper } from "@/service/exam.js";
     import User from "@jx3box/jx3box-common/js/user";
     export default {
         name: "Paper",
         inject: ["__imgRoot"],
-        props: ["paper"],
+        props: ["paper", "showKey"],
         components: { ExamCard },
         data: function () {
             return {
+                data: {},
                 list: [],
                 answer: "",
                 score: "",
                 userAnswers: {},
                 isSubmitted: false,
+                loading: false,
             };
         },
         computed: {
             id() {
                 return this.paper.key;
             },
-            color() {
-                return this.paper.color;
-            },
             name() {
                 return this.paper.name;
             },
-            data() {
-                return this.paper.data;
+            color() {
+                return this.paper.color;
+            },
+            font() {
+                return this.paper.font;
+            },
+            background() {
+                return this.paper.background;
             },
         },
         watch: {
-            "paper.list": {
-                deep: true,
-                immediate: true,
-                handler: function (list) {
-                    this.list = list;
-                },
+            showKey() {
+                this.loadData();
             },
         },
         methods: {
+            loadData() {
+                const id = this.id;
+                this.loading = true;
+                this.showKey == id &&
+                    getPaper(id)
+                        .then((res) => {
+                            let data = res.data;
+
+                            // 发送统计
+                            postStat("paper", id);
+
+                            data.tags = JSON.parse(data.tags);
+                            data.questionDetailList =
+                                data?.questionDetailList?.map((item) => {
+                                    item.options = JSON.parse(item.options);
+                                    item.tags = JSON.parse(item.tags);
+
+                                    return item;
+                                }) || [];
+                            this.data = data;
+
+                            this.list =
+                                data?.questionDetailList?.map((item) => {
+                                    return {
+                                        list: item,
+                                    };
+                                }) || [];
+                        })
+                        .finally(() => {
+                            this.loading = false;
+                        });
+            },
             finalAnswer(val) {
                 this.userAnswers = {
                     ...this.userAnswers,
@@ -111,7 +148,9 @@
                 }
             },
         },
-
+        mounted() {
+            this.loadData();
+        },
     };
 </script>
 

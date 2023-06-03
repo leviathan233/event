@@ -4,43 +4,11 @@ body {
 }
 .p-event-content {
     .flex;
-    margin: 0 auto;
+    justify-content: center;
     width: 100%;
-    width: 1200px;
     min-height: 100vh;
-    .m-mark {
-        .full;
-        .pa;
-        .z(1);
-    }
-    .m-paper {
-        .w(100%);
-        .pa;
-        top: 0;
-        .m-index {
-            .none;
-        }
-
-        &-2 {
-            left: 0;
-            .z(1);
-            .m-index {
-                .db;
-            }
-        }
-        &-3 {
-            left: 1260px;
-            .m-index {
-                .db;
-            }
-        }
-        &-1 {
-            left: -1260px;
-            .m-index {
-                .db;
-            }
-        }
-    }
+    gap: 40px;
+    .clip;
 }
 
 @font: #555090;
@@ -49,7 +17,7 @@ body {
     .clip;
     flex-shrink: 0;
     margin: 104px auto 40px auto;
-    max-width: 1200px;
+    width: 1200px;
     min-height: 100vh;
     background: url("@{kv_exam}logo.svg") 60px 60px no-repeat;
 }
@@ -108,25 +76,28 @@ body {
 
 .m-exam {
     .flex;
-    flex-direction: column;
     .pb(80px);
+    flex-direction: column;
+    height: 100%;
     background: url("@{kv_exam}grid.svg") top center no-repeat;
     .m-title {
-        .size(285px,73px);
+        .size(376px,100px);
         .x;
         .r(10px);
-        .lh(73px);
+        .lh(100px);
         .bold;
         .fz(48px);
+        user-select: none;
+        letter-spacing: 2px;
         align-self: flex-end;
-        margin: 24px 24px 48px 0;
+        margin: 238px 24px 30px 0;
         color: @font;
-        background-color: #fff;
-        border: 4px solid #ffe353;
+        background-color: #fff; 
     }
 
     .m-content {
         .r(30px);
+        height: calc(100% - 930px);
         padding: 30px;
         box-sizing: border-box;
         margin: 0 80px;
@@ -136,5 +107,7 @@ body {
 }
 
 .el-loading-mask {
-    .r(30px);
+    .r(20px);
+    .z(8);
+    background-color: rgba(255, 255, 255, 0.5);
 }

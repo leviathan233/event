@@ -1,9 +1,9 @@
 <template>
     <div class="v-single-card" v-if="item">
         <div class="m-single-question">
-            <div class="u-number">
+            <div class="u-number" :style="{ background: color }">
                 <div class="u-left">
-                    <span class="u-num" v-if="index">{{ index }}</span>
+                    <span class="u-num" v-if="index" :style="{ background }">{{ index }}</span>
                     <template v-if="index && item_tags.length">
                         <a
                             :href="tagsLink(item)"
@@ -11,6 +11,7 @@
                             class="u-tag"
                             v-for="(item, i) in item_tags"
                             :key="i"
+                            :style="{ background, color: font }"
                             >{{ item }}</a
                         >
                     </template>
@@ -18,10 +19,10 @@
 
                 <div class="u-right">
                     <a class="u-user" :href="authorLink(item.createUserId)" target="_blank"
-                        ><span class="u-label">出题人</span>{{ item.createUser }}</a
+                        ><span class="u-label" :style="{ background, color: font }">出题人</span>{{ item.createUser }}</a
                     >
                     <a class="u-exam" :href="`${exam_link}${item.id}`" target="_blank"
-                        ><span class="u-label">试题编号</span>{{ item.id }}</a
+                        ><span class="u-label" :style="{ background, color: font }">试题编号</span>{{ item.id }}</a
                     >
                 </div>
             </div>
@@ -99,7 +100,7 @@
     import { tags } from "@/assets/data/exam.json";
     export default {
         name: "Card",
-        props: ["item", "answer", "index", "isSubmitted"],
+        props: ["item", "answer", "index", "isSubmitted", "background", "color", "font"],
         data: function () {
             return {
                 checkbox: [],
