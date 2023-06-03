@@ -25,7 +25,7 @@
                     :color="color"
                     @changeVal="finalAnswer"
                 />
-                <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }">
+                <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }" v-if="list.length">
                     <el-button class="u-btn" :disabled="isSubmitted">提交</el-button>
                 </div>
             </div>

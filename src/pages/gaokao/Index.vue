@@ -12,8 +12,7 @@
                     {{ item.name }}
                 </span>
             </div>
-        </div>
-        {{ paperList }}
+        </div> 
         <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" class="m-paper" />
     </div>
 </template>
