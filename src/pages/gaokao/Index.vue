@@ -3,18 +3,23 @@
         <div class="m-paper-box" :style="{ backgroundColor: showColor }">
             <span class="u-title">切换试卷</span>
             <div class="m-list">
-                <span v-for="(item, i) in type" :key="i" :class="['u-paper', { active: showId == i }]" @click="changeExam(i)">
+                <span
+                    v-for="(item, i) in type"
+                    :key="i"
+                    :class="['u-paper', { active: showId == i }]"
+                    @click="changeExam(i)"
+                >
                     {{ item.name }}
                 </span>
             </div>
         </div>
-        <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" class="m-paper m-paper-left" />
+        {{ paperList }}
+        <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" class="m-paper" />
     </div>
 </template>
 
 <script>
-    import { type } from "@/assets/data/exam.json";
-    import { cloneDeep } from "lodash";
+    import { exam2023 } from "@/assets/data/exam.json";
     import Paper from "./Paper.vue";
     export default {
         name: "Index",
@@ -22,8 +27,7 @@
         components: { Paper },
         data: function () {
             return {
-                type,
-                typeList: {},
+                type: exam2023,
                 showId: 1,
             };
         },
@@ -36,27 +40,21 @@
                 return this.type[this.showId].color;
             },
             paperList() {
-                const last = this.showId - 1 == 0 ? Object.keys(this.type).length : this.showId - 1;
+                const id = ~~this.showId;
+                const last = id - 1 == 0 ? Object.keys(this.type).length : id - 1;
+                const next = id + 1 > 7 ? 1 : id + 1;
                 return {
-                    1: this.typeList[last],
-                    2: this.typeList[this.showId],
-                    3: this.typeList[this.showId + 1],
+                    1: this.type[last],
+                    2: this.type[id],
+                    3: this.type[next],
                 };
-            },
-        },
-        watch: {
-            type: {
-                immediate: true,
-                handler: function (obj) {
-                    this.typeList = cloneDeep(obj);
-                },
             },
         },
         methods: {
             changeExam(i) {
                 this.showId = i;
+                window.scrollTo(0, 0);
             },
-         
         },
     };
 </script>
