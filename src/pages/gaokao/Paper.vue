@@ -1,8 +1,14 @@
 <template>
     <div class="m-index" :style="{ backgroundColor: color }" v-loading="loading">
         <div class="m-header">
-            <img :src="__imgRoot + 'text2.svg'" class="u-text u-text-1" alt="全力以赴" />
-            <img :src="__imgRoot + 'text.svg'" class="u-text u-text-2" alt="2023剑三高考卷" />
+            <img
+                :src="__imgRoot + 'text2.png?12'"
+                class="u-text u-text-1"
+                :style="{ filter: filterYear }"
+                alt="全力以赴"
+            />
+            <img :src="__imgRoot + 'year.png'" class="u-text u-year" alt="2023" />
+            <img :src="__imgRoot + 'text.png'" class="u-text u-text-2" :style="{ filter }" alt="2023剑三高考卷" />
         </div>
         <div class="m-exam">
             <div class="m-title" :style="{ color: font, background }">{{ name }}</div>
@@ -63,6 +69,12 @@
             },
             background() {
                 return this.paper.background;
+            },
+            filter() {
+                return this.paper.filter;
+            },
+            filterYear() {
+                return this.paper.filterYear;
             },
         },
         watch: {
