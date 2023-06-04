@@ -60,10 +60,10 @@
                 return this.$route.query.paper;
             },
             year() {
-                return this.$route.query.year ? this.$route.query.year : "2023";
+                return this.$route.query.year;
             },
             type() {
-                return this.types[this.year];
+                return this.types[this.year] ? this.types[this.year] : this.types["2023"];
             },
             paperList() {
                 const id = ~~this.showId;
