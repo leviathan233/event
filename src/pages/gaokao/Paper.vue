@@ -1,6 +1,7 @@
 <template>
     <div class="m-index" :style="{ backgroundColor: color }" v-loading="loading">
         <div class="m-header">
+            <img :src="__imgRoot + 'logo.svg'" class="u-text u-logo" alt="魔盒" />
             <img
                 :src="__imgRoot + 'text2.png?12'"
                 class="u-text u-text-1"
