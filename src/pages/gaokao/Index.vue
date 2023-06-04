@@ -13,7 +13,14 @@
                 </span>
             </div>
         </div>
-        <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" :showId="showId" class="m-paper" />
+        <Paper
+            v-for="(item, i) in paperList"
+            :key="i"
+            :paper="item"
+            :showKey="showKey"
+            :showId="showId"
+            class="m-paper"
+        />
     </div>
 </template>
 
@@ -31,7 +38,7 @@
                 },
                 showId: 1,
             };
-        }, 
+        },
         watch: {
             pathId: {
                 immediate: true,
@@ -53,7 +60,7 @@
                 return this.$route.query.paper;
             },
             year() {
-                return this.$route.query.year || "2023";
+                return this.$route.query.year ? this.$route.query.year : "2023";
             },
             type() {
                 return this.types[this.year];
