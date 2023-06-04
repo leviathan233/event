@@ -32,7 +32,7 @@
                     <span class="u-hint"> [{{ item.type == "checkbox" ? "多选题" : "单选题" }}] </span>
                     <span v-html="resolveImagePath(item.title)" class="m-html-title"> </span>
                 </div>
-                <div class="u-option">
+                <div class="u-option" :class="`color-${showId}`">
                     <template v-if="item.type === 'checkbox'">
                         <el-checkbox-group v-model="checkbox" @change="checkAnswers(item.id, checkbox)">
                             <el-checkbox
@@ -101,7 +101,7 @@
     import { tags } from "@/assets/data/exam.json";
     export default {
         name: "Card",
-        props: ["item", "answer", "index", "isSubmitted", "background", "color", "font"],
+        props: ["item", "answer", "index", "isSubmitted", "background", "color", "font", "showId"],
         data: function () {
             return {
                 checkbox: [],
@@ -133,6 +133,12 @@
             },
         },
         watch: {
+            showId: {
+                immediate: true,
+                handler: function (a) {
+                    console.log(a);
+                },
+            },
             item: {
                 deep: true,
                 immediate: true,
@@ -185,3 +191,75 @@
         },
     };
 </script>
+<style lang="less">
+    .color-1 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #ffe353 !important;
+            .u-radio {
+                color: #555090 !important;
+            }
+        }
+    }
+    .color-2 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #bbd4ce !important;
+            .u-radio {
+                color: #264e70 !important;
+            }
+        }
+    }
+    .color-3 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #f9c397 !important;
+            .u-radio {
+                color: #fff !important;
+            }
+        }
+    }
+    .color-4 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #ae7897 !important;
+            .u-radio {
+                color: #fff !important;
+            }
+        }
+    }
+    .color-5 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #f9b4ab !important;
+            .u-radio {
+                color: #fff !important;
+            }
+        }
+    }
+    .color-6 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #f9b4ab !important;
+            .u-radio {
+                color: #fff !important;
+            }
+        }
+    }
+    .color-7 {
+        .el-radio:hover,
+        .el-checkbox:hover,
+        .is-checked {
+            background: #f55951 !important;
+            .u-radio {
+                color: #fff !important;
+            }
+        }
+    }
+</style>

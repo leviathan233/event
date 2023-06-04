@@ -23,6 +23,7 @@
                     :background="background"
                     :font="font"
                     :color="color"
+                    :showId="showId"
                     @changeVal="finalAnswer"
                 />
                 <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }" v-if="list.length">
@@ -41,7 +42,7 @@
     export default {
         name: "Paper",
         inject: ["__imgRoot"],
-        props: ["paper", "showKey"],
+        props: ["paper", "showKey", "showId"],
         components: { ExamCard },
         data: function () {
             return {

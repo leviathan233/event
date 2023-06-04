@@ -13,7 +13,7 @@
                 </span>
             </div>
         </div>
-        <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" class="m-paper" />
+        <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" :showId="showId" class="m-paper" />
     </div>
 </template>
 
@@ -31,7 +31,7 @@
                 },
                 showId: 1,
             };
-        },
+        }, 
         watch: {
             pathId: {
                 immediate: true,
