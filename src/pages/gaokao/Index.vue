@@ -12,7 +12,7 @@
                     {{ item.name }}
                 </span>
             </div>
-        </div> 
+        </div>
         <Paper v-for="(item, i) in paperList" :key="i" :paper="item" :showKey="showKey" class="m-paper" />
     </div>
 </template>
@@ -26,17 +26,37 @@
         components: { Paper },
         data: function () {
             return {
-                type: exam2023,
+                types: {
+                    2023: exam2023,
+                },
                 showId: 1,
             };
         },
-
+        watch: {
+            pathId: {
+                immediate: true,
+                handler: function (id) {
+                    Object.keys(this.type).forEach((index) => {
+                        if (this.type[index].key == id) this.showId = index;
+                    });
+                },
+            },
+        },
         computed: {
             showKey() {
                 return this.type[this.showId].key;
             },
             showColor() {
                 return this.type[this.showId].color;
+            },
+            pathId() {
+                return this.$route.query.paper;
+            },
+            year() {
+                return this.$route.query.year || "2023";
+            },
+            type() {
+                return this.types[this.year];
             },
             paperList() {
                 const id = ~~this.showId;
@@ -52,6 +72,7 @@
         methods: {
             changeExam(i) {
                 this.showId = i;
+                this.$router.push({ path: "/", query: { paper: this.type[i].key } });
                 window.scrollTo(0, 0);
             },
         },

@@ -19,7 +19,8 @@
 
                 <div class="u-right">
                     <a class="u-user" :href="authorLink(item.createUserId)" target="_blank"
-                        ><span class="u-label" :style="{ background, color: font }">出题人</span>{{ item.createUser }}</a
+                        ><span class="u-label" :style="{ background, color: font }">出题人</span
+                        >{{ item.createUser }}</a
                     >
                     <a class="u-exam" :href="`${exam_link}${item.id}`" target="_blank"
                         ><span class="u-label" :style="{ background, color: font }">试题编号</span>{{ item.id }}</a
