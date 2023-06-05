@@ -23,9 +23,11 @@ body {
 .m-paper-box {
     .pf;
     .rt(0,50%);
-    .w(128px);
+    .w(132px);
     .z(9);
     .flex;
+    border: 4px solid #fff;
+    border-right: 0;
     gap: 10px;
     align-items: center;
     padding: 10px;
@@ -33,6 +35,7 @@ body {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     .u-title {
+        .fz(12px);
         .w(1em);
         color: #fff;
         user-select: none;
@@ -59,7 +62,7 @@ body {
 }
 .m-header {
     .pr;
-    .h(513px);
+    .h(500px);
     .u-text {
         .pa;
         &-1 {
@@ -84,28 +87,34 @@ body {
 
 .m-exam {
     .flex;
-    .pb(80px);
+    .pb(60px);
     flex-direction: column;
     height: 100%;
     background: url("@{kv_exam}grid.svg") top center;
     .m-title {
-        .size(376px,100px);
-        .x;
-        .r(10px);
-        .lh(100px);
-        .bold;
-        .fz(48px);
-        user-select: none;
-        letter-spacing: 2px;
-        align-self: flex-end;
-        margin: 238px 24px 30px 0;
-        color: @font;
-        background-color: #fff;
+        .w(1040px);
+        .auto(x);
+        .flex; 
+        .mb(60px);
+        justify-content: flex-end;
+        span {
+            .size(376px,100px);
+            .x;
+            .r(10px);
+            .lh(100px);
+            .bold;
+            .fz(48px);
+            user-select: none;
+            letter-spacing: 2px;
+            align-self: flex-end;
+            color: @font;
+            background-color: #fff;
+        }
     }
 
     .m-content {
         .r(30px);
-        height: calc(100% - 930px);
+        height: calc(100% - 700px);
         padding: 30px;
         box-sizing: border-box;
         margin: 0 80px;
@@ -152,10 +161,10 @@ body {
             .w(100%);
             margin: 50px 0;
         }
-        .m-content{
+        .m-content {
             margin: 0;
             height: calc(100% - 700px);
-            .v-single-card{
+            .v-single-card {
                 margin: 0 0 40px 0;
             }
         }

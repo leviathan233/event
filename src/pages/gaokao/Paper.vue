@@ -1,9 +1,9 @@
 <template>
     <div class="m-index" :style="{ backgroundColor: color }" v-loading="loading">
         <div class="m-header">
-            <img :src="__imgRoot + 'logo.svg'" class="u-text u-logo" alt="魔盒" />
+            <img :src="__imgRoot + `logo-${svgNumber}.svg`" class="u-text u-logo" alt="魔盒" />
             <img
-                :src="__imgRoot + 'text2.png?12'"
+                :src="__imgRoot + `font-${svgNumber}.svg`"
                 class="u-text u-text-1"
                 :style="{ filter: filterYear }"
                 alt="全力以赴"
@@ -12,7 +12,9 @@
             <img :src="__imgRoot + 'text.png'" class="u-text u-text-2" :style="{ filter }" alt="2023剑三高考卷" />
         </div>
         <div class="m-exam">
-            <div class="m-title" :style="{ color: font, background }">{{ name }}</div>
+            <div class="m-title">
+                <span :style="{ color: font, background }">{{ name }}</span>
+            </div>
             <div class="m-content">
                 <ExamCard
                     v-for="(item, index) in list"
@@ -27,6 +29,7 @@
                     :showId="showId"
                     @changeVal="finalAnswer"
                 />
+
                 <div class="m-exam-submit" @click="submit" :class="{ isSubmitted }" v-if="list.length">
                     <el-button class="u-btn" :disabled="isSubmitted">提交</el-button>
                 </div>
@@ -78,9 +81,20 @@
             filterYear() {
                 return this.paper.filterYear;
             },
+            svgNumber() {
+                let id = this.showId;
+                if (id == 5) id = 3;
+                if (id == 6) id = 7;
+                return id;
+            },
         },
         watch: {
             showKey() {
+                this.data = {};
+                this.isSubmitted = false;
+                this.userAnswers = {};
+                this.list = [];
+
                 this.loadData();
             },
         },
