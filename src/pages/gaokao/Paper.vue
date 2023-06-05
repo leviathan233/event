@@ -1,13 +1,8 @@
 <template>
     <div class="m-index" :style="{ backgroundColor: color }" v-loading="loading">
         <div class="m-header">
-            <img :src="__imgRoot + `logo-${svgNumber}.svg`" class="u-text u-logo" alt="魔盒" />
-            <img
-                :src="__imgRoot + `font-${svgNumber}.svg`"
-                class="u-text u-text-1"
-                :style="{ filter: filterYear }"
-                alt="全力以赴"
-            />
+            <img :src="__imgRoot + `logo-${logoNumber}.svg`" class="u-text u-logo" alt="魔盒" />
+            <img :src="__imgRoot + `font-${textNumber}.svg`" class="u-text u-text-1" alt="全力以赴" />
             <img :src="__imgRoot + 'year.png'" class="u-text u-year" alt="2023" />
             <img :src="__imgRoot + 'text.png'" class="u-text u-text-2" :style="{ filter }" alt="2023剑三高考卷" />
         </div>
@@ -81,7 +76,12 @@
             filterYear() {
                 return this.paper.filterYear;
             },
-            svgNumber() {
+            logoNumber() {
+                let id = this.showId;
+                if (id == 6) id = 5;
+                return id;
+            },
+            textNumber() {
                 let id = this.showId;
                 if (id == 5) id = 3;
                 if (id == 6) id = 7;
