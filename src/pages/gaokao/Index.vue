@@ -1,6 +1,7 @@
 <template>
     <div class="p-event-content">
         <div class="m-paper-box" :style="{ backgroundColor: showColor }">
+            <img :src="`${__imgRoot}previous.png`" class="u-previous" @click="changeShow" />
             <span class="u-title">切换试卷</span>
             <div class="m-list">
                 <span
@@ -21,11 +22,27 @@
             :showId="showId"
             class="m-paper"
         />
+        <div class="m-change-paper" v-show="show" :style="{ backgroundColor: showColor }">
+            <div class="m-title">往届考题</div>
+            <div class="m-content">
+                <span
+                    v-for="(item, key) in types"
+                    :key="key"
+                    @click="changeYear(key)"
+                    class="u-year"
+                    :style="{ backgroundColor: showBackground, color: showFont }"
+                    >{{ key }}</span
+                >
+            </div>
+            <span class="u-close" @click="show = false" :style="{ backgroundColor: showBackground, color: showFont }"
+                >关闭</span
+            >
+        </div>
     </div>
 </template>
 
 <script>
-    import { exam2023 } from "@/assets/data/exam.json";
+    import { exams } from "@/assets/data/exam.json";
     import Paper from "./Paper.vue";
     export default {
         name: "Index",
@@ -33,10 +50,10 @@
         components: { Paper },
         data: function () {
             return {
-                types: {
-                    2023: exam2023,
-                },
+                types: { ...exams },
                 showId: 1,
+                show: false,
+                showYear: "2023",
             };
         },
         watch: {
@@ -56,14 +73,21 @@
             showColor() {
                 return this.type[this.showId].color;
             },
+            showBackground() {
+                return this.type[this.showId].background;
+            },
+            showFont() {
+                return this.type[this.showId].font;
+            },
             pathId() {
                 return this.$route.query.paper;
             },
             year() {
-                return this.$route.query.year;
+                return this.$route.query.year || this.showYear;
             },
             type() {
-                return this.types[this.year] ? this.types[this.year] : this.types["2023"];
+                console.log(this.types[this.year])
+                return this.types[this.year];
             },
             paperList() {
                 const id = ~~this.showId;
@@ -81,6 +105,14 @@
                 this.showId = i;
                 this.$router.push({ path: "/", query: { paper: this.type[i].key } });
                 window.scrollTo(0, 0);
+            },
+            changeShow() {
+                this.show = !this.show;
+            },
+            changeYear(year) { 
+                this.showYear = year;
+                this.show = false;
+                this.showId = 1;
             },
         },
     };

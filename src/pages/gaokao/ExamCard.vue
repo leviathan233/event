@@ -133,12 +133,6 @@
             },
         },
         watch: {
-            showId: {
-                immediate: true,
-                handler: function (a) {
-                    console.log(a);
-                },
-            },
             item: {
                 deep: true,
                 immediate: true,

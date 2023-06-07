@@ -34,6 +34,12 @@ body {
     box-sizing: border-box;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+    .u-previous {
+        .pa;
+        .rt(0,-118px);
+        .size(118px);
+        .pointer;
+    }
     .u-title {
         .fz(12px);
         .w(1em);
@@ -94,7 +100,7 @@ body {
     .m-title {
         .w(1040px);
         .auto(x);
-        .flex; 
+        .flex;
         .mb(60px);
         justify-content: flex-end;
         span {
@@ -127,6 +133,54 @@ body {
     .r(20px);
     .z(8);
     background-color: rgba(255, 255, 255, 0.5);
+}
+.m-change-paper {
+    .pf;
+    .w(200px);
+    .r(20px);
+    .lt(50%);
+    .z(3);
+    min-height: 180px;
+    margin: -120px 0 0 -120px;
+    padding: 20px 40px;
+    border: 4px solid #fff;
+    .m-title {
+        .x;
+        .bold;
+        .fz(18px);
+        .lh(38px);
+        color: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+    .m-content {
+        .flex;
+        padding: 20px 0 30px 0;
+        gap: 20px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .u-year {
+            .r(10px);
+            .x;
+            .lh(38px);
+            .pointer;
+            .bold;
+            .size(80px,38px);
+            border: 1px solid #fff;
+        }
+    }
+    .u-close {
+        .db;
+        .x;
+        .r(6px);
+        .lh(32px);
+        .size(120px,32px);
+        .auto(x);
+        .pointer;
+        border: 1px solid #fff;
+        &:hover {
+            filter: brightness(110%);
+        }
+    }
 }
 
 @media screen and(max-width:@ipad) {
