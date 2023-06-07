@@ -20,9 +20,12 @@
             :paper="item"
             :showKey="showKey"
             :showId="showId"
+            :showYear="showYear"
             class="m-paper"
         />
+
         <div class="m-change-paper" v-show="show" :style="{ backgroundColor: showColor }">
+            <img class="u-close" :src="`${__imgRoot}close.svg`" @click="show = false" />
             <div class="m-title">往届考题</div>
             <div class="m-content">
                 <span
@@ -34,10 +37,8 @@
                     >{{ key }}</span
                 >
             </div>
-            <span class="u-close" @click="show = false" :style="{ backgroundColor: showBackground, color: showFont }"
-                >关闭</span
-            >
         </div>
+        <div class="m-mark" v-show="show"></div>
     </div>
 </template>
 
@@ -86,7 +87,6 @@
                 return this.$route.query.year || this.showYear;
             },
             type() {
-                console.log(this.types[this.year])
                 return this.types[this.year];
             },
             paperList() {
@@ -109,10 +109,11 @@
             changeShow() {
                 this.show = !this.show;
             },
-            changeYear(year) { 
+            changeYear(year) {
                 this.showYear = year;
                 this.show = false;
                 this.showId = 1;
+                window.scrollTo(0, 0);
             },
         },
     };

@@ -3,7 +3,7 @@
         <div class="m-header">
             <img :src="__imgRoot + `logo-${logoNumber}.svg`" class="u-text u-logo" alt="魔盒" />
             <img :src="__imgRoot + `font-${textNumber}.svg`" class="u-text u-text-1" alt="全力以赴" />
-            <img :src="__imgRoot + 'year.png'" class="u-text u-year" alt="2023" />
+            <img :src="__imgRoot + 'year.png'" class="u-text u-year" alt="2023" v-if="showYear == '2023'" />
             <img :src="__imgRoot + 'text.png'" class="u-text u-text-2" :style="{ filter }" alt="2023剑三高考卷" />
         </div>
         <div class="m-exam">
@@ -41,7 +41,7 @@
     export default {
         name: "Paper",
         inject: ["__imgRoot"],
-        props: ["paper", "showKey", "showId"],
+        props: ["paper", "showKey", "showId", "showYear"],
         components: { ExamCard },
         data: function () {
             return {
