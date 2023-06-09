@@ -1,18 +1,18 @@
 <template>
-    <div id="app"></div>
+    <div id="app">
+        <Header></Header>
+        <div class="p-event-container">
+            <Index />
+        </div>
+        <Footer class="p-event-footer"></Footer>
+    </div>
 </template>
 
 <script>
-    import { getAppIcon } from "@jx3box/jx3box-common/js/utils";
+    import Index from "@/components/index/Index.vue";
     export default {
         name: "App",
-        props: [],
-        data: function () {
-            return {};
-        },
-        computed: {},
-        methods: { getAppIcon },
-        components: {},
+        components: { Index },
     };
 </script>
 

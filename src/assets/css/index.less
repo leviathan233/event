@@ -1,0 +1,25 @@
+@footer: 58px;
+
+.p-event-container {
+    height: calc(100vh - @footer);
+    .pt(64px);
+    box-sizing: border-box;
+    min-height: 600px;
+}
+
+.m-list {
+    .flex;
+    .size(100%);
+    .auto(x);
+    max-width: 1200px;
+    min-height: 600px - @footer;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    .u-item {
+        .h(500px);
+        .clip;
+        border: 3px solid #000;
+        box-sizing: border-box;
+    }
+}
