@@ -117,7 +117,6 @@
 </template>
 
 <script>
-// TODO: 修改KEY
 const KEY = "yaoxiujie";
 import { getToken, getHonorApi, getAllMyRoles } from "@/service/event";
 import User from "@jx3box/jx3box-common/js/user";

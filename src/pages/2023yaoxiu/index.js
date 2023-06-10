@@ -23,7 +23,6 @@ Object.keys(filters).forEach((key) => {
 });
 
 // 数据与路由
-// TODO：改名字
 import router from "./router.js";
 // import store from "../../store";
 

@@ -1,8 +1,8 @@
 <template>
     <div class="m-navigation">
         <div class="m-list">
-            <div class="m-list-scroll">
-                <a class="u-item" :href="item.link" v-for="(item, i) in list" :key="i">
+            <div class="m-list-scroll" :class="{ isLittle }">
+                <a class="u-item" target="_blank" :href="item.link" v-for="(item, i) in list" :key="i">
                     <span class="u-title">{{ item.name }}</span>
                     <el-image class="u-img" :src="`${eventLink}${item.img}`" fit="cover"></el-image>
                     <div class="u-mark"></div>
@@ -11,7 +11,7 @@
         </div>
         <div class="m-mark">
             <div class="mark"></div>
-            <div class="bg"></div>
+            <div class="bg animation flash"></div>
             <div class="left"></div>
             <div class="right"></div>
             <div class="title">
@@ -36,6 +36,9 @@
             eventLink() {
                 return __imgPath + "topic/event/img/";
             },
+            isLittle() {
+                return this.list.length <= 4;
+            },
         },
         methods: {},
     };
@@ -43,4 +46,27 @@
 
 <style lang="less">
     @import "~@/assets/css/index.less";
+    // .animation {
+    //     -webkit-animation-duration: 2s;
+    //     animation-duration: 2s;
+    //     -webkit-animation-fill-mode: both;
+    //     animation-fill-mode: both;
+    //     -webkit-animation-iteration-count: infinite;
+    //     animation-iteration-count: infinite;
+    // }
+    // .flash {
+    //     -webkit-animation-name: flash;
+    //     animation-name: flash;
+    // }
+    // @keyframes flash {
+    //     0% { 
+    //         background-position: 0;
+    //     }
+
+      
+
+    //     100% {
+    //         background-position: 40px;
+    //     }
+    // }
 </style>

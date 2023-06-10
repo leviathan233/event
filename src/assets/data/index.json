@@ -1,7 +1,7 @@
 {
     "list": [
-        { "name": "剑与侠道", "link": "", "img": "1.svg" },
-        { "name": "剑三欢迎你", "link": "", "img": "2.svg" },
-        { "name": "2023妖秀节", "link": "", "img": "3.svg" }
+        { "name": "剑与侠道", "link": "/jianyuxiadao", "img": "1.svg" },
+        { "name": "剑三欢迎你", "link": "/welcome", "img": "2.svg" },
+        { "name": "2023妖秀节", "link": "/2023yaoxiu", "img": "3.svg" }
     ]
 }
