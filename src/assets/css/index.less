@@ -1,23 +1,26 @@
 @footer: 58px;
 
 .m-list {
-    .pa;
-    .flex;
+    .mid(x);
     .w(100%);
-    .auto(x);
-    .lt(0);
     .z(6);
-    min-height: 840px;
-    padding: 120px 30px 60px 30px;
     max-width: 1200px;
+    min-height: 760px;
+    padding: 160px 30px 0px 30px;
     box-sizing: border-box;
-    justify-content: center;
+}
+.m-list-scroll {
+    .flex;
+    .full;
+    .pb(20px);
+    overflow-x: auto;
     align-items: center;
     gap: 40px;
     .u-item {
         .flex;
         .pointer;
         .size(250px,600px);
+        flex-shrink: 0;
         justify-content: center;
         align-items: center;
         position: relative;
@@ -68,7 +71,7 @@
 .m-mark {
     position: relative;
     background-color: #555090;
-    height: calc(100vh - @footer + 64px);
+    height: calc(100vh - @footer);
     min-height: 800px;
     .mark {
         .full;
@@ -95,7 +98,7 @@
         .z(2);
         background: url("@{img}/event/right.svg") no-repeat;
     }
-    .title{
+    .title {
         .size(486px,65px);
         .pa;
         .lt(50%,64px);
@@ -107,5 +110,33 @@
         letter-spacing: 4px;
         color: #fff;
         background: url("@{img}/event/top.svg") no-repeat;
+    }
+}
+
+.scrollbar(@height: 6px, @width: 6px,@track:#fafafa,@thumb:#eee,@hover:#ddd) {
+    &::-webkit-scrollbar {
+        width: @width;
+        height: @height;
+    }
+    &::-webkit-scrollbar-track,
+    &::-webkit-scrollbar-track-piece {
+        background-color: @track;
+        border-radius: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: @thumb;
+        border-radius: 6px;
+    }
+    &::-webkit-scrollbar-button,
+    &::-webkit-scrollbar-corner,
+    &::-webkit-resizer {
+        display: none;
+    }
+
+    // hover改变颜色
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            background-color: @hover;
+        }
     }
 }
