@@ -11,7 +11,7 @@
         </div>
         <div class="m-mark">
             <div class="mark"></div>
-            <div class="bg animation flash"></div>
+            <div class="dot"></div> 
             <div class="left"></div>
             <div class="right"></div>
             <div class="title">
@@ -46,27 +46,4 @@
 
 <style lang="less">
     @import "~@/assets/css/index.less";
-    // .animation {
-    //     -webkit-animation-duration: 2s;
-    //     animation-duration: 2s;
-    //     -webkit-animation-fill-mode: both;
-    //     animation-fill-mode: both;
-    //     -webkit-animation-iteration-count: infinite;
-    //     animation-iteration-count: infinite;
-    // }
-    // .flash {
-    //     -webkit-animation-name: flash;
-    //     animation-name: flash;
-    // }
-    // @keyframes flash {
-    //     0% { 
-    //         background-position: 0;
-    //     }
-
-      
-
-    //     100% {
-    //         background-position: 40px;
-    //     }
-    // }
 </style>

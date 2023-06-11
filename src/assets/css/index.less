@@ -88,23 +88,18 @@
         background-color: #000;
         opacity: 0.3;
     }
-    .bg {
-        .full;
-        .pa;
-        .lt(-40px);
-        .size(calc(100% + 80px));
-        transform: rotate(9deg);
-        background-image: url("@{img}/event/bg.svg?12");
-        background-position: center center;
-        background-repeat: repeat;
-        animation: move 1.2s ease-in-out infinite;
+    .dot {
+        .size(1000%);
+        background-image: url("@{img}/event/dot.png");
+        animation: right 120s infinite linear;
+        transform: rotate(9deg) translate(-100%, 0);
     }
-    @keyframes move {
-        0% {
-            transform: translate(-20px, 20px);
+    @keyframes right {
+        form {
+            transform: rotate(9deg) translate(0, 0);
         }
-        100% {
-            transform: translate(40px, -40px);
+        to {
+            transform: rotate(9deg) translate(0, -100%);
         }
     }
 
