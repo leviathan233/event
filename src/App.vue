@@ -4,7 +4,7 @@
         <div class="p-event-container">
             <Index />
         </div>
-        <Footer class="p-event-footer"></Footer>
+        <Footer class="p-event-footer" darkMode></Footer>
     </div>
 </template>
 
