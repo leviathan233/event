@@ -9,12 +9,12 @@
                 </a>
             </div>
         </div>
-        <div class="m-mark">
-            <div class="mark"></div>
-            <div class="dot"></div> 
-            <div class="left"></div>
-            <div class="right"></div>
-            <div class="title">
+        <div class="m-bg">
+            <div class="u-mark"></div>
+            <div class="u-dot"></div> 
+            <div class="u-left"></div>
+            <div class="u-right"></div>
+            <div class="u-title">
                 <span>魔盒活动</span>
             </div>
         </div>

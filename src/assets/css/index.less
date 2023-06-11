@@ -74,21 +74,21 @@
     }
 }
 
-.m-mark {
+.m-bg {
     .clip;
     position: relative;
     background-color: #555090;
     height: calc(100vh - @footer);
     min-height: @minH;
     max-height: @maxH;
-    .mark {
+    .u-mark {
         .full;
         .pa;
         .z(1);
         background-color: #000;
         opacity: 0.3;
     }
-    .dot {
+    .u-dot {
         .size(1000%);
         background-image: url("@{img}/event/dot.png");
         animation: right 120s infinite linear;
@@ -103,21 +103,21 @@
         }
     }
 
-    .left {
+    .u-left {
         .pa;
         .lb(0);
         .size(452px,525px);
         .z(9);
         background: url("@{img}/event/left.svg") no-repeat;
     }
-    .right {
+    .u-right {
         .pa;
         .rb(0);
         .size(417px,428px);
         .z(9);
         background: url("@{img}/event/right.svg") no-repeat;
     }
-    .title {
+    .u-title {
         .size(486px,65px);
         .pa;
         .lt(50%,64px);
