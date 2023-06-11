@@ -11,7 +11,7 @@
         </div>
         <div class="m-bg">
             <div class="u-mark"></div>
-            <div class="u-dot"></div> 
+            <div class="u-dot"></div>  
             <div class="u-left"></div>
             <div class="u-right"></div>
             <div class="u-title">

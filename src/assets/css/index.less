@@ -6,6 +6,7 @@
     .mid(x);
     .w(100%);
     .z(6);
+    .clip;
     max-width: 1200px;
     min-height: @minH;
     max-height: @maxH;
@@ -35,6 +36,11 @@
             .full;
             box-sizing: border-box;
             border: 3px solid #000;
+            &:hover {
+                img {
+                    filter: brightness(75%);
+                }
+            }
         }
         .u-title {
             .pa;
@@ -89,17 +95,17 @@
         opacity: 0.3;
     }
     .u-dot {
-        .size(1000%);
-        background-image: url("@{img}/event/dot.png");
-        animation: right 120s infinite linear;
-        transform: rotate(9deg) translate(-100%, 0);
-    }
-    @keyframes right {
-        form {
-            transform: rotate(9deg) translate(0, 0);
-        }
-        to {
-            transform: rotate(9deg) translate(0, -100%);
+        .size(500%);
+        background-image: url("@{img}/event/dot.png?123");
+        animation: right 900s infinite linear;
+        transform: translate(-100%);
+        filter: brightness(120%);
+        &::after {
+            content: "";
+            .db;
+            .full;
+            background-image: url("@{img}/event/dot.png?123");
+            transform: translate(100%);
         }
     }
 
@@ -151,5 +157,37 @@
         background: #fff;
         border: 7px solid #000;
         transition: color 0.2s ease;
+    }
+}
+
+@keyframes right {
+    form {
+        transform: rotate(300deg) translate(-100%);
+    }
+    to {
+        transform: rotate(300deg) translate(100%);
+    }
+}
+@keyframes right_phone {
+    form {
+        transform: translate(-100%);
+    }
+    to {
+        transform: translate(100%);
+    }
+}
+@media screen and(max-width:@phone) {
+    .m-bg {
+        .u-left {
+            .none;
+        }
+        .u-right {
+            .size(208px,214px);
+            background-size: 208px 214px;
+        }
+        .u-dot {
+            .size(5000%,5000%);
+            animation: right 900s infinite linear;
+        }
     }
 }
