@@ -98,17 +98,23 @@
         opacity: 0.3;
     }
     .u-dot {
-        .size(500%);
-        background-image: url("@{img}/event/dot.png?123");
-        animation: right 900s infinite linear;
-        transform: translate(-100%);
+        .size(100%);
+        background-image: url("@{img}event/dot.png");
+        animation: right 180s infinite linear;
         filter: brightness(120%);
-        &::after {
+        min-width: 1260px;
+        &::after,
+        &::before {
             content: "";
             .db;
             .full;
-            background-image: url("@{img}/event/dot.png?123");
-            transform: translate(100%);
+            background-image: url("@{img}event/dot.png");
+        }
+        &::after {
+            transform: translateX(-200%);
+        }
+        &::before {
+            transform: translateX(-100%);
         }
     }
 
@@ -117,14 +123,14 @@
         .lb(0);
         .size(452px,525px);
         .z(9);
-        background: url("@{img}/event/left.svg") no-repeat;
+        background: url("@{img}event/left.svg") no-repeat;
     }
     .u-right {
         .pa;
         .rb(0);
         .size(417px,428px);
         .z(9);
-        background: url("@{img}/event/right.svg") no-repeat;
+        background: url("@{img}event/right.svg") no-repeat;
     }
     .u-title {
         .size(486px,65px);
@@ -137,10 +143,17 @@
         .lh(65px);
         letter-spacing: 4px;
         color: #fff;
-        background: url("@{img}/event/top.svg") no-repeat;
+        background: url("@{img}event/top.svg") no-repeat;
     }
 }
-
+@keyframes right {
+    form {
+        transform: translate(-200%);
+    }
+    to {
+        transform: translate(100%);
+    }
+}
 .m-navigation {
     ::-webkit-scrollbar-track {
         background: #000;
@@ -163,22 +176,6 @@
     }
 }
 
-@keyframes right {
-    form {
-        transform: rotate(300deg) translate(-100%);
-    }
-    to {
-        transform: rotate(300deg) translate(100%);
-    }
-}
-@keyframes right_phone {
-    form {
-        transform: translate(-100%);
-    }
-    to {
-        transform: translate(100%);
-    }
-}
 @media screen and(max-width:@phone) {
     .m-bg {
         .u-left {
@@ -187,10 +184,6 @@
         .u-right {
             .size(208px,214px);
             background-size: 208px 214px;
-        }
-        .u-dot {
-            .size(5000%,5000%);
-            animation: right 900s infinite linear;
         }
     }
 }
