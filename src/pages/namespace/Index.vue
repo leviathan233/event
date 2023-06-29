@@ -8,8 +8,8 @@
                 >
             </div>
             <div class="m-button">
-                <a :href="publish_link" class="u-add"> 注册铭牌</a>
-                <a href="/publish/#/bucket/namespace" class="u-myNamespace"> 我的铭牌 </a>
+                <a :href="register_link" class="u-add"> 注册铭牌</a>
+                <a :href="my_namespace_link" class="u-myNamespace"> 我的铭牌 </a>
             </div>
         </div>
         <div class="m-content">
@@ -86,8 +86,11 @@
             };
         },
         computed: {
-            publish_link: function () {
+            register_link: function () {
                 return publishLink("namespace");
+            },
+            my_namespace_link: function () {
+                return publishLink("bucket/namespace");
             },
             params: function () {
                 let _params = {
