@@ -1,0 +1,113 @@
+@import "../common/common.less";
+body {
+    background-color: #e9d2b6;
+}
+.p-event-content {
+    .fz(16px);
+    .w(1080px);
+    .auto(x);
+}
+.m-add {
+    .flex;
+    .h(56px);
+    .x(right);
+    .mb(30px);
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-end;
+    .m-name {
+        .flex;
+        .fz(14px);
+        color: #000;
+        gap: 10px;
+        align-items: center;
+        .u-img {
+            .size(18px);
+            .r(50%);
+        }
+    }
+}
+.m-content {
+    box-sizing: border-box;
+    background-color: #fff;
+    padding: 20px 20px 0 20px;
+}
+.m-search {
+    .flex;
+    .h(120px);
+    align-items: center;
+    justify-content: space-between;
+    .u-title {
+        .fz(54px);
+        .bold;
+        color: #ff8200;
+    }
+}
+.m-search-box {
+    .flex;
+    gap: 10px;
+    align-items: center;
+    .m-tabs {
+        .flex;
+        gap: 10px;
+        .u-tab {
+            .pointer;
+            .lh(30px);
+            padding: 0 10px;
+            background: #ececec;
+            color: #666;
+            &:hover,
+            &.active {
+                background: #ff8200;
+                color: #fff;
+            }
+        }
+    }
+}
+
+.m-list {
+    .flex;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 20px;
+    .m-item {
+        .flex;
+        color: #000;
+        box-sizing: border-box;
+        width: calc(33.3% - 15px);
+        flex-direction: column;
+        justify-content: space-between;
+        list-style: none;
+        padding: 10px;
+        gap: 20px;
+        background: #ffe6cc4d;
+        .m-title {
+            .flex;
+            justify-content: space-between;
+            .u-title {
+                max-width: 7em;
+                .break(1);
+            }
+            .u-tag {
+                .fz(14px);
+                .r(2px);
+                .break(1);
+                padding: 0 5px;
+                background-color: #000;
+                color: #fff;
+                max-width: 12em;
+            }
+        }
+        .u-desc {
+            .tm(0.6);
+            .break(1);
+        }
+        .m-info {
+            .flex;
+            .tm(0.4);
+            .fz(12px);
+            gap: 5px;
+        }
+    }
+}
