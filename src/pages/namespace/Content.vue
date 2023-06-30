@@ -8,8 +8,8 @@
                 </template>
             </div>
             <div class="m-button">
-                <a :href="register_link" class="u-btn u-register">注册铭牌</a>
-                <a :href="my_namespace_link" class="u-btn u-mine">我的铭牌 </a>
+                <a :href="register_link" target="_blank" class="u-btn u-register">注册铭牌</a>
+                <a :href="my_namespace_link" target="_blank" class="u-btn u-mine">我的铭牌 </a>
             </div>
         </div>
         <div class="m-namespace">
