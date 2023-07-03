@@ -41,13 +41,13 @@
             <div class="m-list" v-loading="loading">
                 <a :href="item.link" target="_blank" class="m-item" v-for="(item, i) in list" :key="i">
                     <div class="m-title">
-                        <span class="u-title">{{ item.key }}</span>
+                        <div class="u-title"><i class="el-icon-postcard"></i><span>{{ item.key }}</span></div>
                         <span class="u-tag">剑网3.com/{{ item.key }}</span>
                     </div>
                     <span class="u-desc">{{ item.desc }}</span>
                     <div class="m-info">
-                        <span>{{ item.user.display_name }}</span>
-                        <span>{{ item.created }}</span>
+                        <span><i class="el-icon-user"></i>{{ item.user.display_name }}</span>
+                        <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
                     </div>
                 </a>
             </div>
@@ -70,6 +70,7 @@
     import { getNamespaceList } from "@/service/namespace.js";
     import { publishLink } from "@jx3box/jx3box-common/js/utils.js";
     import User from "@jx3box/jx3box-common/js/user";
+    import { showDate } from "@jx3box/jx3box-common/js/moment";
     export default {
         name: "Content",
         data: function () {
@@ -158,6 +159,9 @@
                 if (this.page != 1) return (this.page = 1);
                 this.loadData();
             },
+            dataFormat: function(val) {
+            return (val && showDate(~~val * 1000)) || "-";
+        },
         },
         created: function () {
             this.query = this.$route.query.namespace; 
