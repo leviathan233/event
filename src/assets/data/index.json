@@ -1,8 +1,8 @@
 {
     "list": [
-        { "name": "剑与侠道", "link": "/jianyuxiadao", "img": "1.svg" },
-        { "name": "剑三欢迎你", "link": "/welcome", "img": "2.svg" },
+        { "name": "2023剑三高考", "link": "/gaokao", "img": "4.jpg" },
         { "name": "2023妖秀节", "link": "/2023yaoxiu", "img": "3.svg" },
-        { "name": "2023剑三高考", "link": "/gaokao", "img": "4.jpg" }
+        { "name": "剑三欢迎你", "link": "/welcome", "img": "2.svg" },
+        { "name": "剑与侠道", "link": "/jianyuxiadao", "img": "1.svg" }
     ]
 }
