@@ -85,7 +85,7 @@
                 ],
 
                 list: "",
-                per: 9,
+                per: 12,
                 total: 1,
                 page: 1,
 

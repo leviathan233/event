@@ -3,8 +3,10 @@ body {
     background-color: #fff;
 }
 .p-event-content {
+    .flex;
     .fz(16px);
     .auto(x);
+    flex-direction: column;
     max-width: 1440px;
     background-color: #f2d3b6;
     .m-top {
@@ -12,8 +14,26 @@ body {
         background: url("@{kv_namespace}top.png") center top no-repeat;
     }
     .m-bottom {
+        .pr;
+        .clip;
         .h(460px);
-        background: url("@{kv_namespace}bottom.png") center top no-repeat;
+        background: url("@{kv_namespace}bottom.png?") center top no-repeat;
+        .m-man {
+            .pa;
+            .lt(-140px,0);
+            .size(524px,697px);
+            transform: rotateY(180deg);
+        }
+        .m-woman {
+            .pa;
+            .rt(-127px,82px);
+            .size(493px,570px);
+        }
+    }
+}
+@media screen and (max-width:@ipad) {
+    body{
+        min-width: 1230px;
     }
 }
 
@@ -90,7 +110,6 @@ body {
 .m-search {
     .flex;
     .h(100px);
-    .mb(20px);
     align-items: center;
     justify-content: flex-end;
     gap: 10px;
@@ -118,12 +137,12 @@ body {
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 15px;
     .m-item {
         .flex;
         color: #000;
         box-sizing: border-box;
-        width: calc(33.3% - 15px);
+        width: calc(33.3% - 10px);
         height: 100px;
         flex-direction: column;
         justify-content: space-between;
@@ -137,7 +156,7 @@ body {
             .u-title {
                 .flex;
                 .lh(24px);
-                align-items: center; 
+                align-items: center;
                 gap: 5px;
                 span {
                     .break(1);
@@ -147,10 +166,10 @@ body {
                     .fz(24px,1);
                 }
             }
-            .u-tag { 
+            .u-tag {
                 .fz(14px,24px);
                 .r(2px);
-                .break(1); 
+                .break(1);
                 padding: 0 5px;
                 background-color: #000;
                 color: #fff;
@@ -167,7 +186,7 @@ body {
             .tm(0.4);
             .fz(12px);
             gap: 8px;
-            span i{
+            span i {
                 .mr(3px);
             }
         }
@@ -176,7 +195,7 @@ body {
 
 .m-namespace-pages {
     .flex;
-    padding: 50px 80px 0 0;
+    padding: 30px 80px 0 0;
     justify-content: flex-end;
     .el-pagination.is-background .el-pager li:not(.disabled).active {
         background-color: #ff8200;
