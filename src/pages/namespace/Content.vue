@@ -8,7 +8,7 @@
                 </template>
             </div>
             <div class="m-button">
-                <a :href="register_link" target="_blank" class="u-btn u-register">注册铭牌</a>
+                <span class="u-btn u-register" @click="add">注册铭牌</span>
                 <span class="u-btn u-mine" @click="changeList">{{ isMyList ? "全部铭牌" : "我的铭牌" }} </span>
             </div>
         </div>
@@ -41,21 +41,26 @@
                 </div>
             </div>
             <!-- 列表 -->
-            <div class="m-list" v-loading="loading">
+            <div class="m-list" v-loading="loading" :class="{ isMyList }">
                 <template v-if="list.length">
-                    <a target="_blank" class="m-item" v-for="(item, i) in list" :key="i" :href="item.link">
-                        <div class="m-title">
+                    <div class="m-item" v-for="(item, i) in list" :key="i">
+                        <a target="_blank" :href="item.link" class="m-title">
                             <div class="u-title">
                                 <i class="el-icon-postcard"></i><span>{{ item.key }}</span>
                             </div>
                             <span class="u-tag">剑网3.com/{{ item.key }}</span>
-                        </div>
-                        <span class="u-desc">{{ item.desc }}</span>
+                        </a>
+                        <a target="_blank" :href="item.link" class="u-desc">{{ item.desc }}</a>
                         <div class="m-info">
-                            <span><i class="el-icon-user"></i>{{ item.user.display_name }}</span>
+                            <span class="u-name" v-if="item.user">
+                                <i class="el-icon-user"></i>{{ item.user.display_name }}
+                            </span>
                             <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
+                            <el-button class="u-edit" size="mini" @click.stop="edit(item, i)"
+                                ><i class="el-icon-edit"></i> 编辑</el-button
+                            >
                         </div>
-                    </a>
+                    </div>
                 </template>
                 <span v-else class="m-item m-no-item"> 暂无对应铭牌 </span>
             </div>
@@ -71,6 +76,10 @@
                 ></el-pagination>
             </div>
         </div>
+        <!-- 弹窗 -->
+        <el-dialog title="铭牌注册" :visible.sync="visible" width="600" :before-close="close">
+            <Form :data="data" @close="close" @update="update" />
+        </el-dialog>
     </div>
 </template>
 
@@ -80,6 +89,8 @@
     import User from "@jx3box/jx3box-common/js/user";
     import { showDate } from "@jx3box/jx3box-common/js/moment";
     import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+    import Form from "./Form";
+    import { cloneDeep } from "lodash";
     export default {
         name: "Content",
         data: function () {
@@ -105,7 +116,18 @@
                 isLogin: User.isLogin(),
                 userInfo: User.getInfo(),
                 isMyList: false,
+
+                visible: false,
+                form: {
+                    key: "",
+                    desc: "",
+                    link: "",
+                },
+                data: {},
             };
+        },
+        components: {
+            Form,
         },
         computed: {
             register_link: function () {
@@ -159,11 +181,14 @@
             },
             loadMyData() {
                 this.loading = true;
-                const params = this.removeEmpty(
-                    Object.assign({}, this.params, {
-                        key: this.search,
-                    })
-                );
+                const { source_type, page, per, status } = this.params;
+                const params = this.removeEmpty({
+                    key: this.search,
+                    source_type,
+                    page,
+                    limit: per,
+                    status,
+                });
                 getNamespace(params)
                     .then((res) => {
                         const list = res.data.data.data || [];
@@ -196,6 +221,32 @@
                 if (!this.isLogin) return;
                 this.isMyList = !this.isMyList;
                 this.isMyList ? this.loadMyData() : this.loadData();
+            },
+            close() {
+                this.visible = false;
+            },
+            add() {
+                this.visible = true;
+                this.data = {
+                    mode: "add",
+                    form: cloneDeep(this.form),
+                };
+            },
+            edit(item, i) {
+                this.visible = true;
+                this.data = {
+                    mode: "edit",
+                    form: cloneDeep(item),
+                    index: i,
+                };
+            },
+            update(form) {
+                if (form.ID) {
+                    this.list[form.__index] = form;
+                } else {
+                    this.list.unshift(form);
+                    if (this.list.length > this.per) this.list.pop();
+                }
             },
         },
         created() {

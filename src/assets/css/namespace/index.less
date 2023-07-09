@@ -176,12 +176,14 @@ body {
         padding: 10px;
         gap: 10px;
         background: #ffe6cc4d;
+
         &.m-no-item {
             align-items: center;
             justify-content: center;
         }
         .m-title {
             .flex;
+            .color(#000);
             justify-content: space-between;
             .u-title {
                 .flex;
@@ -207,6 +209,7 @@ body {
             }
         }
         .u-desc {
+            .color(#000);
             .fz(14px);
             .tm(0.6);
             .break(1);
@@ -218,6 +221,30 @@ body {
             gap: 8px;
             span i {
                 .mr(3px);
+            }
+            .u-edit {
+                .none;
+                .fz(12px);
+                padding: 5px 12px;
+            }
+        }
+    }
+    &.isMyList {
+        .m-item {
+            gap: 8px;
+            .u-desc {
+                flex-shrink: 0;
+            }
+            .m-info {
+                justify-content: space-between;
+                align-items: center;
+
+                .u-name {
+                    .none;
+                }
+                .u-edit {
+                    .db;
+                }
             }
         }
     }

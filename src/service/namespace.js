@@ -10,10 +10,26 @@ function getNamespaceList(params) {
 // 获取我的铭牌
 function getNamespace(params) {
     return $helper()({
-      method: 'GET',
-      url: `/api/my/namespaces`,
-      params: params,
+        method: 'GET',
+        url: `/api/my/namespaces`,
+        params: params,
     })
-  }
+}
 
-export { getNamespaceList, getNamespace };
+function updateNamespace(id, data) {
+    return $cms().put(`/api/cms/namespace/${id}`, data)
+}
+
+function createNamespace(data) {
+    return $cms().post('/api/cms/namespace', data)
+}
+
+function getNamespaceByKey(key) {
+    return $cms().get(`/api/cms/namespace-key`, {
+        params: {
+            key,
+        },
+    })
+}
+
+export { getNamespaceList, getNamespace, updateNamespace, createNamespace, getNamespaceByKey };
