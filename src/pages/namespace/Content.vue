@@ -9,47 +9,55 @@
             </div>
             <div class="m-button">
                 <a :href="register_link" target="_blank" class="u-btn u-register">注册铭牌</a>
-                <a :href="my_namespace_link" target="_blank" class="u-btn u-mine">我的铭牌 </a>
+                <span class="u-btn u-mine" @click="changeList">{{ isMyList ? "全部铭牌" : "我的铭牌" }} </span>
             </div>
         </div>
         <div class="m-namespace">
             <!-- 搜索 -->
-            <div class="m-search">
-                <div class="m-tabs">
-                    <span
-                        :class="[{ active: type == item.value }, 'u-tab']"
-                        v-for="(item, i) in tabs"
-                        :key="i"
-                        @click="change(item.value)"
-                        >{{ item.label }}</span
-                    >
-                </div>
-                <div class="u-search" slot="search-before" key="namespace-search">
-                    <el-input
-                        placeholder="请输入搜索内容"
-                        v-model.trim.lazy="search"
-                        clearable
-                        @clear="onSearch"
-                        @keydown.native.enter="onSearch"
-                        class="input-with-select"
-                    >
-                        <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>
-                    </el-input>
+            <div class="m-tool">
+                <span class="u-title">{{ title }}</span>
+                <div class="m-search">
+                    <div class="m-tabs">
+                        <span
+                            :class="[{ active: type == item.value }, 'u-tab']"
+                            v-for="(item, i) in tabs"
+                            :key="i"
+                            @click="change(item.value)"
+                            >{{ item.label }}</span
+                        >
+                    </div>
+                    <div class="u-search" slot="search-before" key="namespace-search">
+                        <el-input
+                            placeholder="请输入搜索内容"
+                            v-model.trim.lazy="search"
+                            clearable
+                            @clear="onSearch"
+                            @keydown.native.enter="onSearch"
+                            class="u-input"
+                        >
+                            <el-button slot="append" icon="el-icon-search" @click="onSearch"></el-button>
+                        </el-input>
+                    </div>
                 </div>
             </div>
             <!-- 列表 -->
             <div class="m-list" v-loading="loading">
-                <a :href="item.link" target="_blank" class="m-item" v-for="(item, i) in list" :key="i">
-                    <div class="m-title">
-                        <div class="u-title"><i class="el-icon-postcard"></i><span>{{ item.key }}</span></div>
-                        <span class="u-tag">剑网3.com/{{ item.key }}</span>
-                    </div>
-                    <span class="u-desc">{{ item.desc }}</span>
-                    <div class="m-info">
-                        <span><i class="el-icon-user"></i>{{ item.user.display_name }}</span>
-                        <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
-                    </div>
-                </a>
+                <template v-if="list.length">
+                    <a target="_blank" class="m-item" v-for="(item, i) in list" :key="i" :href="item.link">
+                        <div class="m-title">
+                            <div class="u-title">
+                                <i class="el-icon-postcard"></i><span>{{ item.key }}</span>
+                            </div>
+                            <span class="u-tag">剑网3.com/{{ item.key }}</span>
+                        </div>
+                        <span class="u-desc">{{ item.desc }}</span>
+                        <div class="m-info">
+                            <span><i class="el-icon-user"></i>{{ item.user.display_name }}</span>
+                            <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
+                        </div>
+                    </a>
+                </template>
+                <span v-else class="m-item m-no-item"> 暂无对应铭牌 </span>
             </div>
             <!-- 分页 -->
             <div class="m-namespace-pages">
@@ -67,10 +75,11 @@
 </template>
 
 <script>
-    import { getNamespaceList } from "@/service/namespace.js";
+    import { getNamespaceList, getNamespace } from "@/service/namespace.js";
     import { publishLink } from "@jx3box/jx3box-common/js/utils.js";
     import User from "@jx3box/jx3box-common/js/user";
     import { showDate } from "@jx3box/jx3box-common/js/moment";
+    import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
     export default {
         name: "Content",
         data: function () {
@@ -85,7 +94,7 @@
                 ],
 
                 list: "",
-                per: 12,
+                per: 8,
                 total: 1,
                 page: 1,
 
@@ -95,14 +104,12 @@
 
                 isLogin: User.isLogin(),
                 userInfo: User.getInfo(),
+                isMyList: false,
             };
         },
         computed: {
             register_link: function () {
                 return publishLink("namespace");
-            },
-            my_namespace_link: function () {
-                return publishLink("bucket/namespace");
             },
             params: function () {
                 let _params = {
@@ -112,6 +119,9 @@
                     status: 1,
                 };
                 return _params;
+            },
+            title() {
+                return this.isMyList ? "我的铭牌" : "铭牌大厅";
             },
         },
         watch: {
@@ -123,7 +133,7 @@
                 immediate: true,
                 handler: function (newVal) {
                     this.query = "";
-                    this.loadData();
+                    this.isMyList ? this.loadMyData() : this.loadData();
                 },
             },
         },
@@ -131,7 +141,7 @@
             change(key) {
                 this.type = key;
             },
-            loadData: function () {
+            loadData() {
                 this.loading = true;
                 const params = this.removeEmpty(
                     Object.assign({}, this.params, {
@@ -147,7 +157,27 @@
                         this.loading = false;
                     });
             },
-            removeEmpty: function (obj) {
+            loadMyData() {
+                this.loading = true;
+                const params = this.removeEmpty(
+                    Object.assign({}, this.params, {
+                        key: this.search,
+                    })
+                );
+                getNamespace(params)
+                    .then((res) => {
+                        const list = res.data.data.data || [];
+                        this.list = list.map((item) => {
+                            item.user.display_name = item.user.nickname;
+                            return item;
+                        });
+                        this.total = res.data.data.total;
+                    })
+                    .finally(() => {
+                        this.loading = false;
+                    });
+            },
+            removeEmpty(obj) {
                 Object.keys(obj).forEach((key) => {
                     if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
                         delete obj[key];
@@ -155,16 +185,21 @@
                 });
                 return obj;
             },
-            onSearch: function () {
+            onSearch() {
                 if (this.page != 1) return (this.page = 1);
                 this.loadData();
             },
-            dataFormat: function(val) {
-            return (val && showDate(~~val * 1000)) || "-";
+            dataFormat(val) {
+                return (val && showDate(~~val * 1000)) || "-";
+            },
+            changeList() {
+                if (!this.isLogin) return;
+                this.isMyList = !this.isMyList;
+                this.isMyList ? this.loadMyData() : this.loadData();
+            },
         },
-        },
-        created: function () {
-            this.query = this.$route.query.namespace; 
+        created() {
+            this.query = this.$route.query.namespace;
         },
     };
 </script>
