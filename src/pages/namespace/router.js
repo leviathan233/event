@@ -18,7 +18,7 @@ const routes = [
     },
 ];
 
-const base = ''
+let base = ''
 if(process.env.NODE_ENV === 'development'){
     base = '/namespace'
 }else if(location.origin.includes('jx3box.com')){
