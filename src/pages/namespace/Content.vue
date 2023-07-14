@@ -263,7 +263,7 @@ export default {
         },
         buildLink(item){
             if(item.source_type == 'team'){
-                return __Root + '/team/org/' + item.source_id
+                return __Root + 'team/org/' + item.source_id
             }else{
                 return item.link || __Root + '?namespace=' + item.key
             }
