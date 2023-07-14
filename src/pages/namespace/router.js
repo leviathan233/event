@@ -18,9 +18,18 @@ const routes = [
     },
 ];
 
+const base = ''
+if(process.env.NODE_ENV === 'development'){
+    base = '/namespace'
+}else if(location.origin.includes('jx3box.com')){
+    base = '/event/namespace'
+}else{
+    base = '/'
+}
+
 const router = new VueRouter({
     mode: "history",
-    base: (process.env.NODE_ENV === 'development' || location.origin.includes('jx3box.com')) ? '/namespace' : '',
+    base:  base,
     routes,
 });
 
