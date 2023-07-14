@@ -1,25 +1,39 @@
 <template>
-    <div class="p-event-content">
-        <div class="m-top"></div>
-        <Content />
-        <div class="m-bottom">
-            <img :src="__imgRoot + 'man.png'" class="m-man">
-            <img :src="__imgRoot + 'woman.png'" class="m-woman">
+    <!-- 专题页 -->
+    <div class="p-event" :class="'v-' + page_name">
+        <Header :overlayEnable="true"></Header>
+        <div class="p-event-content">
+            <div class="m-top"></div>
+            <Content />
+            <div class="m-bottom">
+                <img :src="imgRoot + 'man.png'" class="m-man" />
+                <img :src="imgRoot + 'woman.png'" class="m-woman" />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import Content from "./Content";
-    export default {
-        name: "Index",
-        inject: ["__imgRoot"],
-        components: {
-            Content,
+import Content from "./Content";
+import { postStat } from "@jx3box/jx3box-common/js/stat";
+import { __imgPath } from "@jx3box/jx3box-common/data/jx3box.json";
+export default {
+    name: "Index",
+    components: {
+        Content,
+    },
+    data: function () {
+        return {
+            imgRoot: __imgPath + "topic/namespace/",
+        };
+    },
+    computed: {
+        page_name: function () {
+            return "namespace";
         },
-        data: function () {
-            return {};
-        },
-        computed: {},
-    };
+    },
+    created: function () {
+        postStat("event", "namespace");
+    },
+};
 </script>

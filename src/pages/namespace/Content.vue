@@ -84,176 +84,188 @@
 </template>
 
 <script>
-    import { getNamespaceList, getNamespace } from "@/service/namespace.js";
-    import { publishLink } from "@jx3box/jx3box-common/js/utils.js";
-    import User from "@jx3box/jx3box-common/js/user";
-    import { showDate } from "@jx3box/jx3box-common/js/moment";
-    import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
-    import Form from "./Form";
-    import { cloneDeep } from "lodash";
-    export default {
-        name: "Content",
-        data: function () {
-            return {
-                type: "all",
-                tabs: [
-                    { label: "全部", value: "all" },
-                    { label: "玩家", value: "player" },
-                    { label: "团队", value: "team" },
-                    { label: "系统", value: "system" },
-                    { label: "自定义", value: "custom" },
-                ],
+import { getNamespaceList, getNamespace } from "@/service/namespace.js";
+import { publishLink } from "@jx3box/jx3box-common/js/utils.js";
+import User from "@jx3box/jx3box-common/js/user";
+import { showDate } from "@jx3box/jx3box-common/js/moment";
+import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
+import Form from "./Form";
+import { cloneDeep } from "lodash";
+export default {
+    name: "Content",
+    data: function () {
+        return {
+            type: "all",
+            tabs: [
+                { label: "全部", value: "all" },
+                { label: "玩家", value: "player" },
+                { label: "团队", value: "team" },
+                { label: "系统", value: "system" },
+                { label: "自定义", value: "custom" },
+            ],
 
-                list: "",
-                per: 8,
-                total: 1,
-                page: 1,
+            list: "",
+            per: 8,
+            total: 1,
+            page: 1,
 
-                search: "",
-                query: "",
-                loading: false,
+            search: "",
+            query: "",
+            loading: false,
 
-                isLogin: User.isLogin(),
-                userInfo: User.getInfo(),
-                isMyList: false,
+            isLogin: User.isLogin(),
+            userInfo: User.getInfo(),
+            isMyList: false,
 
-                visible: false,
-                form: {
-                    key: "",
-                    desc: "",
-                    link: "",
-                },
-                data: {},
+            visible: false,
+            form: {
+                key: "",
+                desc: "",
+                link: "",
+            },
+            data: {},
+        };
+    },
+    components: {
+        Form,
+    },
+    computed: {
+        register_link: function () {
+            return publishLink("namespace");
+        },
+        params: function () {
+            let _params = {
+                source_type: this.type == "all" ? "" : this.type,
+                page: this.page,
+                per: this.per,
+                status: 1,
             };
+            return _params;
         },
-        components: {
-            Form,
+        title() {
+            return this.isMyList ? "我的铭牌" : "铭牌大厅";
         },
-        computed: {
-            register_link: function () {
-                return publishLink("namespace");
-            },
-            params: function () {
-                let _params = {
-                    source_type: this.type == "all" ? "" : this.type,
-                    page: this.page,
-                    per: this.per,
-                    status: 1,
-                };
-                return _params;
-            },
-            title() {
-                return this.isMyList ? "我的铭牌" : "铭牌大厅";
-            },
+    },
+    watch: {
+        type: function () {
+            this.page = 1;
         },
-        watch: {
-            type: function () {
-                this.page = 1;
-            },
-            params: {
-                deep: true,
-                immediate: true,
-                handler: function (newVal) {
-                    this.query = "";
-                    this.isMyList ? this.loadMyData() : this.loadData();
-                },
-            },
-        },
-        methods: {
-            change(key) {
-                this.type = key;
-            },
-            loadData() {
-                this.loading = true;
-                const params = this.removeEmpty(
-                    Object.assign({}, this.params, {
-                        key: this.search,
-                    })
-                );
-                getNamespaceList(params)
-                    .then((res) => {
-                        this.list = res.data.data.list || [];
-                        this.total = res.data.data.total;
-                    })
-                    .finally(() => {
-                        this.loading = false;
-                    });
-            },
-            loadMyData() {
-                this.loading = true;
-                const { source_type, page, per, status } = this.params;
-                const params = this.removeEmpty({
-                    key: this.search,
-                    source_type,
-                    page,
-                    limit: per,
-                    status,
-                });
-                getNamespace(params)
-                    .then((res) => {
-                        const list = res.data.data.data || [];
-                        this.list = list.map((item) => {
-                            item.user.display_name = item.user.nickname;
-                            return item;
-                        });
-                        this.total = res.data.data.total;
-                    })
-                    .finally(() => {
-                        this.loading = false;
-                    });
-            },
-            removeEmpty(obj) {
-                Object.keys(obj).forEach((key) => {
-                    if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
-                        delete obj[key];
-                    }
-                });
-                return obj;
-            },
-            onSearch() {
-                if (this.page != 1) return (this.page = 1);
-                this.loadData();
-            },
-            dataFormat(val) {
-                return (val && showDate(~~val * 1000)) || "-";
-            },
-            changeList() {
-                if (!this.isLogin) return;
-                this.isMyList = !this.isMyList;
+        params: {
+            deep: true,
+            immediate: true,
+            handler: function (newVal) {
+                this.query = "";
                 this.isMyList ? this.loadMyData() : this.loadData();
             },
-            close() {
-                this.visible = false;
-            },
-            add() {
-                this.visible = true;
-                this.data = {
-                    mode: "add",
-                    form: cloneDeep(this.form),
-                };
-            },
-            edit(item, i) {
-                this.visible = true;
-                this.data = {
-                    mode: "edit",
-                    form: cloneDeep(item),
-                    index: i,
-                };
-            },
-            update(form) {
-                if (form.ID) {
-                    this.list[form.__index] = form;
-                } else {
-                    if (this.isMyList) this.loadMyData();
+        },
+        "$route.query": {
+            deep: true,
+            immediate: true,
+            handler: function (newVal) {
+                if (newVal.namespace) {
+                    this.search = newVal.namespace;
+                    setTimeout(() => {
+                        this.onSearch();
+                    }, 1000);
                 }
             },
         },
-        created() {
-            this.query = this.$route.query.namespace;
+    },
+    methods: {
+        change(key) {
+            this.type = key;
         },
-    };
+        loadData() {
+            this.loading = true;
+            const params = this.removeEmpty(
+                Object.assign({}, this.params, {
+                    key: this.search,
+                })
+            );
+            getNamespaceList(params)
+                .then((res) => {
+                    this.list = res.data.data.list || [];
+                    this.total = res.data.data.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        loadMyData() {
+            this.loading = true;
+            const { source_type, page, per, status } = this.params;
+            const params = this.removeEmpty({
+                key: this.search,
+                source_type,
+                page,
+                limit: per,
+                status,
+            });
+            getNamespace(params)
+                .then((res) => {
+                    const list = res.data.data.data || [];
+                    this.list = list.map((item) => {
+                        item.user.display_name = item.user.nickname;
+                        return item;
+                    });
+                    this.total = res.data.data.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
+        },
+        removeEmpty(obj) {
+            Object.keys(obj).forEach((key) => {
+                if (obj[key] === null || obj[key] === undefined || obj[key] === "") {
+                    delete obj[key];
+                }
+            });
+            return obj;
+        },
+        onSearch() {
+            if (this.page != 1) return (this.page = 1);
+            this.loadData();
+        },
+        dataFormat(val) {
+            return (val && showDate(~~val * 1000)) || "-";
+        },
+        changeList() {
+            if (!this.isLogin) return;
+            this.isMyList = !this.isMyList;
+            this.isMyList ? this.loadMyData() : this.loadData();
+        },
+        close() {
+            this.visible = false;
+        },
+        add() {
+            this.visible = true;
+            this.data = {
+                mode: "add",
+                form: cloneDeep(this.form),
+            };
+        },
+        edit(item, i) {
+            this.visible = true;
+            this.data = {
+                mode: "edit",
+                form: cloneDeep(item),
+                index: i,
+            };
+        },
+        update(form) {
+            if (form.ID) {
+                this.list[form.__index] = form;
+            } else {
+                if (this.isMyList) this.loadMyData();
+            }
+        },
+    },
+    created() {
+        this.query = this.$route.query.namespace;
+    },
+};
 </script>
 
 <style lang="less">
-    @import "~@/assets/css/namespace/index.less";
+@import "~@/assets/css/namespace/index.less";
 </style>
