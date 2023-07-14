@@ -31,9 +31,15 @@
             </div>
         </div>
         <el-form class="m-publish-namespace-form" :rules="rules" :model="form">
-            <el-form-item label="关键词" prop="key">
+            <el-form-item label="关键词" prop="key" class="m-input">
                 <el-input v-model="form.key" placeholder="全局唯一关键词"></el-input>
-                <el-alert v-if="!available" title="已有关键词，请重新输入" type="error" show-icon />
+                <el-alert
+                    class="u-available"
+                    v-if="form.key && !available"
+                    title="已有关键词，请重新输入"
+                    type="error"
+                    show-icon
+                />
             </el-form-item>
             <el-form-item label="链接" prop="link">
                 <el-input v-model="form.link" placeholder="请输入跳转地址">
@@ -176,9 +182,7 @@
                         .then((res) => {
                             this.form.user = {
                                 display_name: "",
-                            };
-                            this.form.created = res.data.data.created;
-                            // TODO: 未返回 ID，需要再优化
+                            }; 
                             this.onSuccess();
                             this.count -= 1;
                         })
@@ -204,4 +208,8 @@
 
 <style lang="less">
     @import "~@/assets/css/namespace/form.less";
+    .el-form-item.m-input .el-form-item__content .u-available {
+        .mt(10px);
+        padding: 0 14px;
+    }
 </style>

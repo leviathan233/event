@@ -244,8 +244,7 @@
                 if (form.ID) {
                     this.list[form.__index] = form;
                 } else {
-                    this.list.unshift(form);
-                    if (this.list.length > this.per) this.list.pop();
+                    if (this.isMyList) this.loadMyData();
                 }
             },
         },
