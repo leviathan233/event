@@ -21,6 +21,8 @@ import * as filters from "@/utils/filters.js";
 Object.keys(filters).forEach((key) => {
 	Vue.filter(key, filters[key]);
 });
+import reporter from "@jx3box/jx3box-common/js/reporter";
+reporter.install(Vue);
 
 // 数据与路由
 import router from "./router.js";

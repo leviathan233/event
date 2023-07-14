@@ -3,16 +3,16 @@
 </template>
 <script>
     // Root
-    var jx3box = "https://www.jx3box.com";
-    var pathname = location.pathname;
+    let jx3box = "https://www.jx3box.com";
+    let pathname = location.pathname;
     if (pathname == "/") {
         location.href = jx3box;
     }
     
     // Namespace
-    var bbs = jx3box + "/bbs/#/namespace";
-    var api = "https://cms.jx3box.com/api/cms/namespace-key";
-    var key = decodeURIComponent(pathname.slice(11));
+    let bbs = jx3box + "/bbs/#/namespace";
+    let api = "https://cms.jx3box.com/api/cms/namespace-key";
+    let key = decodeURIComponent(pathname.slice(11));
 
     fetch(`https://next2.jx3box.com/api/summary-any/namespace-${key}`);
     fetch(`${api}?key=${key}`)
@@ -21,7 +21,7 @@
         })
         .then((data) => {
             if (data && data.code == 0) {
-                var namespace = data.data;
+                let namespace = data.data;
                 if (namespace.source_type == "team") {
                     location.href = jx3box + "/team/org/" + namespace.source_id;
                 } else {
