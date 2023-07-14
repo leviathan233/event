@@ -20,7 +20,7 @@ const routes = [
 
 const router = new VueRouter({
     mode: "history",
-    base: process.env.NODE_ENV === 'development' ? '/namespace' : '',
+    base: (process.env.NODE_ENV === 'development' || location.origin.includes('jx3box.com')) ? '/namespace' : '',
     routes,
 });
 
