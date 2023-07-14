@@ -1,7 +1,7 @@
 <template>
     <!-- 专题页 -->
     <div class="p-event" :class="'v-' + page_name">
-        <Header :overlayEnable="true"></Header>
+        <!-- <Header :overlayEnable="true"></Header> -->
         <div class="p-event-content">
             <div class="m-top"></div>
             <Content />
