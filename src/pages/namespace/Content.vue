@@ -44,13 +44,13 @@
             <div class="m-list" v-loading="loading" :class="{ isMyList }">
                 <template v-if="list.length">
                     <div class="m-item" v-for="(item, i) in list" :key="i">
-                        <a target="_blank" :href="item.link" class="m-title">
+                        <a target="_blank" :href="buildLink(item)" class="m-title">
                             <div class="u-title">
                                 <i class="el-icon-postcard"></i><span>{{ item.key }}</span>
                             </div>
                             <span class="u-tag">剑网3.com/{{ item.key }}</span>
                         </a>
-                        <a target="_blank" :href="item.link" class="u-desc">{{ item.desc }}</a>
+                        <span class="u-desc">{{ item.desc }}</span>
                         <div class="m-info">
                             <span class="u-name" v-if="item.user">
                                 <i class="el-icon-user"></i>{{ item.user.display_name }}
@@ -261,6 +261,13 @@ export default {
                 if (this.isMyList) this.loadMyData();
             }
         },
+        buildLink(item){
+            if(item.source_type == 'team'){
+                return __Root + '/team/org/' + item.source_id
+            }else{
+                return item.link || __Root + '?namespace=' + item.key
+            }
+        }
     },
     created() {
         this.query = this.$route.query.namespace;
