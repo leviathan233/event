@@ -7,7 +7,7 @@
                     <span class="u-name">{{ userInfo.name }}</span>
                 </template>
             </div>
-            <div class="m-button" v-if="isDefaultDomain">
+            <div class="m-button" v-show="isDefaultDomain">
                 <span class="u-btn u-register" @click="add">注册铭牌</span>
                 <span class="u-btn u-mine" @click="changeList">{{ isMyList ? "全部铭牌" : "我的铭牌" }} </span>
             </div>
@@ -125,7 +125,7 @@ export default {
             },
             data: {},
 
-            isDefaultDomain: !location.origin.includes('jx3box.com')
+            isDefaultDomain: location.origin.includes('jx3box.com')
         };
     },
     components: {
