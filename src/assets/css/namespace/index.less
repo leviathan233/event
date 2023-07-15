@@ -16,7 +16,7 @@ body {
     .m-bottom {
         .pr;
         .clip;
-        .h(460px);
+        .size(100%,460px);
         background: url("@{kv_namespace}bottom.png") center top no-repeat;
         .m-man {
             .pa;
@@ -28,6 +28,13 @@ body {
             .pa;
             .rt(-127px,82px);
             .size(493px,570px);
+        }
+        .u-link {
+            .pa;
+            .pointer;
+            .lb(50%,30px);
+            .ml(-300px);
+            .size(600px,200px);
         }
     }
 }
@@ -73,13 +80,20 @@ body {
             .color(#fff);
             box-sizing: border-box;
             user-select: none;
+            border: 0;
             &:hover {
                 filter: brightness(110%);
+            }
+            &.is-disabled {
+                cursor: not-allowed;
+                pointer-events: none;
+                filter: grayscale(100%);
+                color: #222;
             }
             &.u-mine {
                 .size(152px,56px);
                 .lt(0);
-                .pl(30px);
+                .pl(0);
                 background: url("@{kv_namespace}mine.png") center top no-repeat;
             }
             &.u-register {
@@ -255,7 +269,7 @@ body {
     padding: 15px 80px 0 0;
     justify-content: flex-end;
     .el-pagination.is-background .el-pager li:not(.disabled).active {
-        background-color: #ff8200;
+        background-color: #000;
         filter: brightness(110%);
     }
     .el-pagination.is-background .btn-next,

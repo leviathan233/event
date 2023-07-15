@@ -7,9 +7,11 @@
                     <span class="u-name">{{ userInfo.name }}</span>
                 </template>
             </div>
-            <div class="m-button" v-show="isDefaultDomain">
-                <span class="u-btn u-register" @click="add">注册铭牌</span>
-                <span class="u-btn u-mine" @click="changeList">{{ isMyList ? "全部铭牌" : "我的铭牌" }} </span>
+            <div class="m-button">
+                <el-button class="u-btn u-register" @click="add" :disabled="!isLogin">注册铭牌</el-button>
+                <el-button class="u-btn u-mine" @click="changeList" :disabled="!isLogin">
+                    {{ isMyList ? "全部铭牌" : "我的铭牌" }}
+                </el-button>
             </div>
         </div>
         <div class="m-namespace">
@@ -86,11 +88,12 @@
 <script>
 import { getNamespaceList, getNamespace } from "@/service/namespace.js";
 import { publishLink } from "@jx3box/jx3box-common/js/utils.js";
-import User from "@jx3box/jx3box-common/js/user";
 import { showDate } from "@jx3box/jx3box-common/js/moment";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
-import Form from "./Form";
 import { cloneDeep } from "lodash";
+import User from "@jx3box/jx3box-common/js/user";
+import Form from "./Form";
+
 export default {
     name: "Content",
     data: function () {
@@ -124,8 +127,6 @@ export default {
                 link: "",
             },
             data: {},
-
-            isDefaultDomain: location.origin.includes('jx3box.com')
         };
     },
     components: {
@@ -261,13 +262,13 @@ export default {
                 if (this.isMyList) this.loadMyData();
             }
         },
-        buildLink(item){
-            if(item.source_type == 'team'){
-                return __Root + 'team/org/' + item.source_id
-            }else{
-                return item.link || __Root + '?namespace=' + item.key
+        buildLink(item) {
+            if (item.source_type == "team") {
+                return __Root + "team/org/" + item.source_id;
+            } else {
+                return item.link || __Root + "?namespace=" + item.key;
             }
-        }
+        },
     },
     created() {
         this.query = this.$route.query.namespace;
