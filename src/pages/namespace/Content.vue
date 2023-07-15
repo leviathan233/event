@@ -54,13 +54,15 @@
                         </a>
                         <span class="u-desc">{{ item.desc }}</span>
                         <div class="m-info">
-                            <span class="u-name" v-if="item.user">
-                                <i class="el-icon-user"></i>{{ item.user.display_name }}
-                            </span>
-                            <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
-                            <el-button class="u-edit" size="mini" @click.stop="edit(item, i)"
-                                ><i class="el-icon-edit"></i> 编辑</el-button
-                            >
+                            <div class="m-text">
+                                <span class="u-name" v-if="item.user">
+                                    <i class="el-icon-user"></i>{{ item.user.display_name }}
+                                </span>
+                                <span><i class="el-icon-date"></i>{{ dataFormat(item.created) }}</span>
+                            </div>
+                            <el-button class="u-edit" size="mini" @click.stop="edit(item, i)">
+                                <i class="el-icon-edit"></i> 编辑
+                            </el-button>
                         </div>
                     </div>
                 </template>
