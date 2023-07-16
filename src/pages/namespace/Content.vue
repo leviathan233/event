@@ -8,8 +8,8 @@
                 </template>
             </div>
             <div class="m-button">
-                <el-button class="u-btn u-register" @click="add" :disabled="!isLogin">注册铭牌</el-button>
-                <el-button class="u-btn u-mine" @click="changeList" :disabled="!isLogin">
+                <el-button class="u-btn u-register" @click="add">注册铭牌</el-button>
+                <el-button class="u-btn u-mine" @click="changeList" v-if="isDefaultHost && isLogin">
                     {{ isMyList ? "全部铭牌" : "我的铭牌" }}
                 </el-button>
             </div>
@@ -132,6 +132,8 @@ export default {
                 link: "",
             },
             data: {},
+
+            isDefaultHost: location.origin.includes("jx3box.com"),
         };
     },
     components: {
@@ -246,6 +248,10 @@ export default {
             this.visible = false;
         },
         add() {
+            if (!this.isLogin) return User.toLogin();
+
+            if (!this.isDefaultHost) location.href = `${__Root}event/namespace`;
+
             this.visible = true;
             this.data = {
                 mode: "add",
