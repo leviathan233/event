@@ -50,7 +50,10 @@
                             <div class="u-title">
                                 <i class="el-icon-postcard"></i><span>{{ item.key }}</span>
                             </div>
-                            <span class="u-tag">剑网3.com/{{ item.key }}</span>
+                            <el-tag class="u-tag" :type="item.status ? 'success' : 'info'" v-if="isMyList">
+                                {{ item.status ? "生效中" : "审核中" }}
+                            </el-tag>
+                            <span class="u-tag u-jx3" v-else>剑网3.com/{{ item.key }}</span>
                         </a>
                         <span class="u-desc">{{ item.desc }}</span>
                         <div class="m-info">
