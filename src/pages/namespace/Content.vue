@@ -248,9 +248,9 @@ export default {
             this.visible = false;
         },
         add() {
-            if (!this.isLogin) return User.toLogin();
-
             if (!this.isDefaultHost) location.href = `${__Root}event/namespace`;
+
+            if (!this.isLogin) return User.toLogin();
 
             this.visible = true;
             this.data = {
