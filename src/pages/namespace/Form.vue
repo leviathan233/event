@@ -32,7 +32,7 @@
         </div>
         <el-form class="m-publish-namespace-form" :rules="rules" :model="form">
             <el-form-item label="关键词" prop="key" class="m-input">
-                <el-input v-model.lazy="form.key" placeholder="全局唯一关键词"></el-input>
+                <el-input v-model.lazy="form.key" clearable placeholder="全局唯一关键词"></el-input>
                 <el-alert
                     class="u-available"
                     v-if="form.key && !available"
@@ -42,7 +42,7 @@
                 />
             </el-form-item>
             <el-form-item label="链接" prop="link">
-                <el-input v-model.lazy="form.link" placeholder="请输入跳转地址">
+                <el-input v-model.lazy="form.link" clearable placeholder="请输入跳转地址">
                     <template slot="prepend">https://</template>
                 </el-input>
             </el-form-item>
@@ -77,6 +77,7 @@ export default {
             available: false,
             processing: false,
             form: {},
+            key: "",
             rules: {
                 key: [
                     {
@@ -120,6 +121,7 @@ export default {
             immediate: true,
             handler: function (form) {
                 this.form = form;
+                this.key = form.key;
             },
         },
         "form.key": {
@@ -161,7 +163,7 @@ export default {
                 if (!res.data.data) {
                     this.available = true;
                 } else {
-                    this.available = false;
+                    this.available = this.isEditMode && this.key == res.data.data.key ? true : false;
                 }
             });
         },
