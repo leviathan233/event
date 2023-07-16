@@ -248,7 +248,10 @@ export default {
             this.visible = false;
         },
         add() {
-            if (!this.isDefaultHost) location.href = `${__Root}event/namespace`;
+            if (!this.isDefaultHost){
+                location.href = `${__Root}event/namespace`;
+                return;
+            }
 
             if (!this.isLogin) return User.toLogin();
 
