@@ -50,7 +50,8 @@
                             <div class="u-title">
                                 <i class="el-icon-postcard"></i><span>{{ item.key }}</span>
                             </div>
-                            <el-tag class="u-tag" :type="item.status ? 'success' : 'info'" v-if="isMyList">
+                            <el-tag class="u-tag" v-if="item.status == 2" type="danger">被驳回</el-tag>
+                            <el-tag class="u-tag" :type="item.status ? 'success' : 'info'" v-else-if="isMyList">
                                 {{ item.status ? "生效中" : "审核中" }}
                             </el-tag>
                             <span class="u-tag u-jx3" v-else>剑网3.com/{{ item.key }}</span>
@@ -133,7 +134,7 @@ export default {
             },
             data: {},
 
-            isDefaultHost: location.origin.includes("jx3box.com"),
+            isDefaultHost: !location.origin.includes("jx3box.com"),
         };
     },
     components: {
@@ -194,7 +195,11 @@ export default {
             );
             getNamespaceList(params)
                 .then((res) => {
-                    this.list = res.data.data.list || [];
+                    this.list =
+                        res.data.data.list.map((item) => {
+                            item._link = cloneDeep(item.link);
+                            return item;
+                        }) || [];
                     this.total = res.data.data.total;
                 })
                 .finally(() => {
@@ -215,6 +220,7 @@ export default {
                 .then((res) => {
                     const list = res.data.data.data || [];
                     this.list = list.map((item) => {
+                        item._link = cloneDeep(item.link);
                         item.user.display_name = item.user.nickname;
                         return item;
                     });
@@ -244,11 +250,12 @@ export default {
             this.isMyList = !this.isMyList;
             this.isMyList ? this.loadMyData() : this.loadData();
         },
-        close() {
+        close(key) {
             this.visible = false;
+            if (key == "success") this.loadMyData();
         },
         add() {
-            if (!this.isDefaultHost){
+            if (!this.isDefaultHost) {
                 location.href = `${__Root}event/namespace`;
                 return;
             }
@@ -280,7 +287,7 @@ export default {
             if (item.source_type == "team") {
                 return __Root + "team/org/" + item.source_id;
             } else {
-                return item.link || __Root + "?namespace=" + item.key;
+                return item._link || __Root + "?namespace=" + item.key;
             }
         },
     },

@@ -23,6 +23,10 @@
         {
             "key": "namespace",
             "title": "剑三铭牌"
+        },
+        {
+            "key": "blindbox",
+            "title": "剑三盲盒"
         }
     ]
 }

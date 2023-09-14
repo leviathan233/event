@@ -32,7 +32,12 @@
         </div>
         <el-form class="m-publish-namespace-form" :rules="rules" :model="form">
             <el-form-item label="关键词" prop="key" class="m-input">
-                <el-input v-model.lazy="form.key" clearable placeholder="全局唯一关键词"></el-input>
+                <el-input
+                    v-model.lazy="form.key"
+                    @blur="checkAvailable(form.key)"
+                    clearable
+                    placeholder="全局唯一关键词"
+                ></el-input>
                 <el-alert
                     class="u-available"
                     v-if="form.key && !available"
@@ -42,7 +47,7 @@
                 />
             </el-form-item>
             <el-form-item label="链接" prop="link">
-                <el-input v-model.lazy="form.link" clearable placeholder="请输入跳转地址">
+                <el-input v-model.lazy="form.link" @blur="checkLink(form.key)" clearable placeholder="请输入跳转地址">
                     <template slot="prepend">https://</template>
                 </el-input>
             </el-form-item>
@@ -74,7 +79,7 @@ export default {
     data: function () {
         return {
             count: 0,
-            available: false,
+            available: true,
             processing: false,
             form: {},
             key: "",
@@ -110,9 +115,7 @@ export default {
         },
 
         ready: function () {
-            if (this.isEditMode) {
-                return this.available && this.form.link;
-            }
+            if (this.isEditMode) return this.available && this.form.link;
             return this.available && this.form.link && this.count;
         },
     },
@@ -120,35 +123,17 @@ export default {
         "data.form": {
             immediate: true,
             handler: function (form) {
+                if (form.link.includes("http://") || form.link.includes("https://")) {
+                    form.link = form.link.replace(/https?\:\/\//, "");
+                }
                 this.form = form;
                 this.key = form.key;
             },
         },
-        "form.key": {
-            immediate: true,
-            handler: function (val) {
-                this.checkKey(val);
-            },
-        },
-        "form.link": function (val) {
-            this.checkLink(val);
-        },
     },
     methods: {
-        close() {
-            this.$emit("close");
-        },
-        checkKey: function (val) {
-            if (!val) {
-                this.available = true;
-                return;
-            }
-            this.form.key = sterilizer(this.form.key).kill().removeSpace().toString();
-            if (this.form.key == this.key_cache) {
-                this.available = true;
-                return;
-            }
-            this.checkAvailable();
+        close(key) {
+            this.$emit("close", key);
         },
         checkLink: function (val) {
             if (!val) return;
@@ -158,8 +143,9 @@ export default {
             }
         },
 
-        checkAvailable: function () {
-            getNamespaceByKey(this.form.key).then((res) => {
+        checkAvailable: function (val) {
+            if (!val) return;
+            getNamespaceByKey(val).then((res) => {
                 if (!res.data.data) {
                     this.available = true;
                 } else {
@@ -198,7 +184,7 @@ export default {
         },
         onSuccess() {
             this.$notify.success({ title: "成功", message: "提交成功", showClose: false });
-            this.close();
+            this.close("success");
             this.$emit("update", this.form);
         },
     },
