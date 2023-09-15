@@ -5,8 +5,9 @@
     .size(100%,1000px);
     .clip;
     .m-bg {
-        .full;
+        .size(103%);
         filter: blur(10px);
+        .ml(-20px);
         &:after {
             content: "";
             .pa;
@@ -49,12 +50,20 @@
             .pa;
             .size(244px, 208px);
             background: url("@{kv_blindbox}base.png") bottom center no-repeat;
+            transition: all 0.4s ease 0s;
+
             .u-img {
                 .pa;
                 .pointer;
                 .lt(50%);
                 .size(158px,180px);
                 margin: -168px 0 0 -80px;
+                &:hover {
+                    transform: translateY(-10px);
+                }
+            }
+            &.active .u-img {
+                animation: active_flash 2s;
             }
             &:nth-child(1) {
                 .lt(110px,0);
@@ -118,10 +127,9 @@
         .mt(8px);
         .w(446px);
         .pb(15px);
-        h3 {
+        .m-title {
             .flex;
             align-items: center;
-            margin: 0;
             height: 40px;
             padding: 0 20px;
         }
@@ -130,7 +138,112 @@
         }
     }
     .m-lottery {
+        .pr;
+        .flex;
         .mt(180px);
-        .size(100%,400px);
+        .size(446px,348px);
+        flex-wrap: wrap;
+        gap: 30px;
+        .u-img {
+            .pointer;
+            transition: 0.2s ease;
+            &:hover {
+                filter: brightness(110%);
+                transform: scale(1.06);
+            }
+        }
+        .refresh {
+            .size(124px);
+        }
+        .random {
+            .size(290px,124px);
+        }
+        .open {
+            .size(446px,194px);
+        }
+        .m-history {
+            .pa;
+            .lb(-188px,0);
+            min-height: 50px;
+            min-width: 168px;
+            .m-title {
+                .pr;
+                .flex;
+                .h(50px);
+                align-items: center;
+                padding: 0 20px;
+                .u-close {
+                    .none;
+                    .pa;
+                    .rt(0);
+                    .size(42px,81px);
+                }
+            }
+            .m-history-content {
+                .none;
+                .size(600px,500px);
+            }
+            &.history {
+                animation: open_history 1s;
+                left: -640px;
+                .m-history-content,
+                .u-close {
+                    .db;
+                }
+                &:hover {
+                    transform: scale(1);
+                    filter: brightness(100%);
+                }
+            }
+            &.close {
+                animation: close_history 1s;
+            }
+        }
+    }
+}
+@keyframes active_flash {
+    5% {
+        transform: rotate(15deg);
+    }
+    10% {
+        transform: rotate(-10deg);
+    }
+    15% {
+        transform: rotate(5deg);
+    }
+    20% {
+        transform: rotate(-5deg);
+    }
+    25% {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+@keyframes open_history {
+    from {
+        left: -188px;
+        width: 168px;
+        height: 50px;
+    }
+    to {
+        left: -640px;
+        width: 600px;
+        height: 550px;
+    }
+}
+@keyframes close_history {
+    from {
+        left: -640px;
+        width: 600px;
+        height: 550px;
+    }
+    to {
+        left: -188px;
+        width: 168px;
+        height: 50px;
     }
 }
