@@ -19,7 +19,7 @@
         }
     }
     .p-event-content {
-        .full;
+        .size(100%,1000px);
         .pa;
         .z(2);
         .lt(0);
@@ -29,16 +29,21 @@
 }
 .m-content {
     .flex;
-    .size(100%,1000px);
+    .size(100%);
     max-width: 1920px;
     box-sizing: border-box;
     background: url("@{kv_blindbox}bg.png") top center no-repeat;
 }
-
+.box {
+    .r(15px);
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 0;
+    background: #fff;
+}
 .m-left {
     .pr;
     .clip;
-    .w(1100px);
+    flex: 1;
     .logo {
         margin: 80px 0 0 50px;
     }
@@ -96,13 +101,22 @@
                 .lt(638px,308px);
             }
         }
+        .u-mark {
+            .none;
+            .pa;
+            .full;
+            .z(3);
+            &.active {
+                .db;
+            }
+        }
     }
 }
 
 .m-right {
     .flex;
-    .size(600px,100%);
-    flex: 1;
+    .size(560px,100%);
+    flex-shrink: 0;
     padding: 104px 100px 0 0;
     box-sizing: border-box;
     flex-direction: column;
@@ -117,12 +131,7 @@
         box-sizing: border-box;
         background: url("@{kv_blindbox}point.png") left bottom no-repeat;
     }
-    .box {
-        .r(15px);
-        border-top-right-radius: 0;
-        border-bottom-left-radius: 0;
-        background: #fff;
-    }
+
     .m-prize {
         .mt(8px);
         .w(446px);
@@ -201,6 +210,40 @@
         }
     }
 }
+
+.m-goods {
+    .none;
+    .pa;
+    .size(100%,1000px);
+    .lt(0);
+    .z(9);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    gap: 70px;
+
+    &.active {
+        .flex;
+        .m-item {
+            animation: show_good 1s;
+        }
+    }
+    .m-item {
+        .flex;
+        max-width: 1120px;
+        flex-wrap: wrap;
+        gap: 30px;
+        .u-item {
+            .size(200px,240px);
+            box-sizing: border-box;
+        }
+    }
+    .u-get {
+        .pointer;
+        .size(200px,60px);
+    }
+}
 @keyframes active_flash {
     5% {
         transform: rotate(15deg);
@@ -245,5 +288,16 @@
         left: -188px;
         width: 168px;
         height: 50px;
+    }
+}
+@keyframes show_good {
+    0% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scale3d(1.05, 1.05, 1.05);
+    }
+    to {
+        transform: scaleX(1);
     }
 }

@@ -16,6 +16,7 @@
                         >
                             <img class="u-img" :src="`${__imgRoot}box.png`" alt="奖品" v-show="showBox(index)" />
                         </div>
+                        <div :class="['u-mark', { active }]"></div>
                     </div>
                 </div>
                 <div class="m-right">
@@ -41,6 +42,12 @@
                 </div>
             </div>
         </div>
+        <div class="m-goods" :class="{ active: show_goods }">
+            <div class="m-item">
+                <div class="u-item box" v-for="item in 10" :key="item"></div>
+            </div>
+            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="show_goods = false" />
+        </div>
     </div>
 </template>
 
@@ -54,6 +61,7 @@ export default {
             close: false,
             open: false,
             all: false,
+            show_goods: false,
             active: "",
             activeList: [],
         };
@@ -68,6 +76,8 @@ export default {
             this.active = ~~index;
             setTimeout(() => {
                 this.activeList.push(~~index);
+                this.show_goods = true;
+                this.active = "";
             }, 1800);
         },
         openHistory() {
