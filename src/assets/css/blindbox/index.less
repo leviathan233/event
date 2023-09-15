@@ -1,0 +1,136 @@
+.p-event-footer {
+    background-color: #24292e;
+}
+.p-event-blindbox {
+    .size(100%,1000px);
+    .clip;
+    .m-bg {
+        .full;
+        filter: blur(10px);
+        &:after {
+            content: "";
+            .pa;
+            .db;
+            .full;
+            .lt(0);
+            .z(1);
+            background: rgba(0, 0, 0, 0.3);
+        }
+    }
+    .p-event-content {
+        .full;
+        .pa;
+        .z(2);
+        .lt(0);
+        .flex;
+        justify-content: center;
+    }
+}
+.m-content {
+    .flex;
+    .size(100%,1000px);
+    max-width: 1920px;
+    box-sizing: border-box;
+    background: url("@{kv_blindbox}bg.png") top center no-repeat;
+}
+
+.m-left {
+    .pr;
+    .clip;
+    .w(1100px);
+    .logo {
+        margin: 80px 0 0 50px;
+    }
+    .m-box {
+        .pa;
+        .size(980px,460px);
+        .lb(88px,0);
+        .u-box {
+            .pa;
+            .size(244px, 208px);
+            background: url("@{kv_blindbox}base.png") bottom center no-repeat;
+            .u-img {
+                .pa;
+                .pointer;
+                .lt(50%);
+                .size(158px,180px);
+                margin: -168px 0 0 -80px;
+            }
+            &:nth-child(1) {
+                .lt(110px,0);
+            }
+            &:nth-child(2) {
+                .lt(374px,0);
+            }
+            &:nth-child(3) {
+                .lt(638px,0);
+            }
+            &:nth-child(4) {
+                .lt(-20px,154px);
+            }
+            &:nth-child(5) {
+                .lt(244px,154px);
+            }
+            &:nth-child(6) {
+                .lt(508px,154px);
+            }
+            &:nth-child(7) {
+                .lt(772px,154px);
+            }
+            &:nth-child(8) {
+                .lt(110px,308px);
+            }
+            &:nth-child(9) {
+                .lt(374px,308px);
+            }
+            &:nth-child(10) {
+                .lt(638px,308px);
+            }
+        }
+    }
+}
+
+.m-right {
+    .flex;
+    .size(600px,100%);
+    flex: 1;
+    padding: 104px 100px 0 0;
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: flex-end;
+    .m-point {
+        .h(40px);
+        .pl(90px);
+        .fz(30px);
+        .color(#000);
+        .lh(48px);
+        min-width: 180px;
+        box-sizing: border-box;
+        background: url("@{kv_blindbox}point.png") left bottom no-repeat;
+    }
+    .box {
+        .r(15px);
+        border-top-right-radius: 0;
+        border-bottom-left-radius: 0;
+        background: #fff;
+    }
+    .m-prize {
+        .mt(8px);
+        .w(446px);
+        .pb(15px);
+        h3 {
+            .flex;
+            align-items: center;
+            margin: 0;
+            height: 40px;
+            padding: 0 20px;
+        }
+        .m-item {
+            .h(190px);
+        }
+    }
+    .m-lottery {
+        .mt(180px);
+        .size(100%,400px);
+    }
+}
