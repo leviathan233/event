@@ -9,12 +9,12 @@
                     </div>
                     <div class="m-box">
                         <div
-                            :class="['u-box', { active: index === active }]"
+                            :class="['u-box', { active: index === active}]"
                             v-for="(item, index) in 10"
                             :key="item"
                             @click="change(index)"
                         >
-                            <img class="u-img" :src="`${__imgRoot}box.png`" alt="奖品" v-show="showBox(index)" />
+                            <img class="u-img" :src="`${__imgRoot}box.png`" alt="奖品" :key="replay + 'box' + index" v-show="showBox(index)" />
                         </div>
                         <div :class="['u-mark', { active }]"></div>
                     </div>
@@ -28,7 +28,7 @@
                         <div class="m-item"></div>
                     </div>
                     <div class="m-lottery">
-                        <img :src="`${__imgRoot}refresh.png`" class="u-img refresh" alt="刷新盲盒" />
+                        <img :src="`${__imgRoot}refresh.png`" class="u-img refresh" @click="refreshBox" alt="刷新盲盒" />
                         <img :src="`${__imgRoot}random.png`" class="u-img random" alt="随机开盒" />
                         <img :src="`${__imgRoot}open.png`" class="u-img open" alt="十连开盒" />
                         <div class="m-history box u-img" :class="{ history, close }">
@@ -63,6 +63,7 @@ export default {
             all: false,
             show_goods: false,
             active: "",
+            replay: 0,
             activeList: [],
         };
     },
@@ -71,6 +72,10 @@ export default {
     methods: {
         showBox(index) {
             return !this.activeList.includes(index);
+        },
+        refreshBox() {
+            this.activeList = [];
+            this.replay++;
         },
         change(index) {
             this.active = ~~index;
