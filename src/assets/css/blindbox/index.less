@@ -70,35 +70,68 @@
             &.active .u-img {
                 animation: active_flash 2s;
             }
+            .u-img {
+                opacity: 0;
+            }
             &:nth-child(1) {
                 .lt(110px,0);
+                .u-img {
+                    animation: drop 1s ease-in forwards;
+                }
             }
             &:nth-child(2) {
                 .lt(374px,0);
+                .u-img {
+                    animation: drop 1s ease-in 0.1s forwards;
+                }
             }
             &:nth-child(3) {
                 .lt(638px,0);
+                .u-img {
+                    animation: drop 1s ease-in 0.2s forwards;
+                }
             }
             &:nth-child(4) {
                 .lt(-20px,154px);
+                .u-img {
+                    animation: drop 1s ease-in 0.3s forwards;
+                }
             }
             &:nth-child(5) {
                 .lt(244px,154px);
+                .u-img {
+                    animation: drop 1s ease-in 0.4s forwards;
+                }
             }
             &:nth-child(6) {
                 .lt(508px,154px);
+                .u-img {
+                    animation: drop 1s ease-in 0.5s forwards;
+                }
             }
             &:nth-child(7) {
                 .lt(772px,154px);
+                .u-img {
+                    animation: drop 1s ease-in 0.6s forwards;
+                }
             }
             &:nth-child(8) {
                 .lt(110px,308px);
+                .u-img {
+                    animation: drop 1s ease-in 0.7s forwards;
+                }
             }
             &:nth-child(9) {
                 .lt(374px,308px);
+                .u-img {
+                    animation: drop 1s ease-in 0.8s forwards;
+                }
             }
             &:nth-child(10) {
                 .lt(638px,308px);
+                .u-img {
+                    animation: drop 1s ease-in 0.9s forwards;
+                }
             }
         }
         .u-mark {
@@ -265,6 +298,17 @@
         opacity: 0;
     }
 }
+
+@keyframes drop {
+        0% {
+            top: -800px;
+            opacity: 1;
+        }
+        100% {
+            top: 50%;
+            opacity: 1;
+        }
+    }
 
 @keyframes open_history {
     from {
