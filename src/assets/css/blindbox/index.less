@@ -169,6 +169,7 @@
         .mt(8px);
         .w(446px);
         .pb(15px);
+        overflow: hidden;
         .m-title {
             .flex;
             align-items: center;
@@ -177,6 +178,17 @@
         }
         .m-item {
             .h(190px);
+            overflow: hidden;
+            .m-scroll-block {
+                height: 100%;
+                white-space: nowrap;
+                display: inline-block;
+                width: max-content;
+                animation: scroll_prize 20s linear infinite;
+                img{
+                    height: 100%;
+                }
+            }
         }
     }
     .m-lottery {
@@ -309,6 +321,11 @@
             opacity: 1;
         }
     }
+
+@keyframes scroll_prize {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
 @keyframes open_history {
     from {
