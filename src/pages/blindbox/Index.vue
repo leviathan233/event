@@ -31,7 +31,13 @@
                         <div class="m-title">
                             <img :src="`${__imgRoot}prize.png`" alt="奖品一览" />
                         </div>
-                        <div class="m-item"></div>
+                        <div class="m-item">
+                            <div class="m-scroll-block" ref="scrollBlock" :style="{animationDuration}">
+                                <img v-for="(item, index) in prizeList" :key="`prize${index}`" @load="onLoadPrizeList" :src="item.url" :alt="item.name" />
+                                <img v-for="(item, index) in prizeList" :key="`prize_end${index}`" @load="onLoadPrizeList" :src="item.url" :alt="item.name" />
+                                <!--跑马灯效果需要展示两份图片以首尾衔接-->
+                            </div>
+                        </div>
                     </div>
                     <div class="m-lottery">
                         <img
@@ -76,10 +82,14 @@ export default {
             active: "",
             replay: 0,
             activeList: [],
+            prizeList: [],
+            animationDuration: '0s',
         };
     },
     computed: {},
-
+    mounted() {
+        this.prizeList = [];
+    },
     methods: {
         showBox(index) {
             return !this.activeList.includes(index);
@@ -87,6 +97,10 @@ export default {
         refreshBox() {
             this.activeList = [];
             this.replay++;
+        },
+        onLoadPrizeList() {
+            // 根据给的奖品参数计算动画时间两份图只滚动一份，所以/100再/2
+            this.animationDuration = `${this.$refs.scrollBlock.offsetWidth / 200}s`;
         },
         change(index) {
             this.active = ~~index;
