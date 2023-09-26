@@ -4,27 +4,27 @@ const { JX3BOX, SEO } = require("@jx3box/jx3box-common");
 const Setting = require("./setting.json");
 let events = Setting.events;
 let eventPages = {
-	index: {
-		title: "JX3BOX - 魔盒专题导航",
-		entry: `src/main.js`,
-		template: "public/pc.html",
-		filename: `index.html`,
-	},
+    index: {
+        title: "JX3BOX - 魔盒专题导航",
+        entry: `src/main.js`,
+        template: "public/pc.html",
+        filename: `index.html`,
+    },
 };
 events.forEach((event) => {
-	eventPages[event.key] = {
-		title: event.title + Setting.suffix,
-		entry: `src/pages/${event.key}/index.js`,
-		template: "public/pc.html",
-		filename: `${event.key}/index.html`,
-	};
+    eventPages[event.key] = {
+        title: event.title + Setting.suffix,
+        entry: `src/pages/${event.key}/index.js`,
+        template: "public/pc.html",
+        filename: `${event.key}/index.html`,
+    };
 });
 
 
 module.exports = {
 
     //❤️ Multiple pages ~
-	pages: eventPages,
+    pages: eventPages,
 
     //❤️ Porxy ~
     devServer: {
@@ -35,7 +35,7 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
-            "/api/inspire":{
+            "/api/inspire": {
                 target: "https://pay.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
@@ -129,22 +129,22 @@ module.exports = {
         (process.env.NODE_ENV === 'development' && '/') ||
 
         //BY origin
-        (process.env.STATIC_PATH === "origin" && `${JX3BOX.__staticPath["origin"]}${pkg.name}/`) || 
+        (process.env.STATIC_PATH === "origin" && `${JX3BOX.__staticPath["origin"]}${pkg.name}/`) ||
 
         //BY github
-        (process.env.STATIC_PATH === "github" && `${JX3BOX.__staticPath["github"]}${pkg.name}/`) || 
+        (process.env.STATIC_PATH === "github" && `${JX3BOX.__staticPath["github"]}${pkg.name}/`) ||
 
         //BY jsdelivr
-        (process.env.STATIC_PATH === "jsdelivr" && `${JX3BOX.__staticPath["jsdelivr"]}${pkg.name}@gh-pages/`) || 
+        (process.env.STATIC_PATH === "jsdelivr" && `${JX3BOX.__staticPath["jsdelivr"]}${pkg.name}@gh-pages/`) ||
 
         //BY OSS=>CDN
         (process.env.STATIC_PATH === "mirror" && `${JX3BOX.__staticPath["mirror"]}${pkg.name}/`) ||
 
         //BY relative path
-        (process.env.STATIC_PATH === "repo" && `/${pkg.name}/`) || 
+        (process.env.STATIC_PATH === "repo" && `/${pkg.name}/`) ||
 
         //BY root path or bind a domain
-        (process.env.STATIC_PATH == 'root' && '/') || 
+        (process.env.STATIC_PATH == 'root' && '/') ||
 
         //for lost
         '/',
@@ -173,8 +173,8 @@ module.exports = {
 
         //💝 in-line svg imgs ~
         config.module
-			.rule("vue")
-			.use("vue-svg-inline-loader")
+            .rule("vue")
+            .use("vue-svg-inline-loader")
             .loader("vue-svg-inline-loader")
 
 
@@ -186,12 +186,13 @@ module.exports = {
             path.resolve(__dirname, './node_modules/@jx3box/jx3box-common/css/var.less'),
             path.resolve(__dirname, './src/assets/css/var.less')
         )
-        function addStyleResource (rule) {
+
+        function addStyleResource(rule) {
             rule.use('style-resource')
-              .loader('style-resources-loader')
-              .options({
-                patterns: preload_styles,
-            })
+                .loader('style-resources-loader')
+                .options({
+                    patterns: preload_styles,
+                })
         }
         types.forEach(type => addStyleResource(config.module.rule('less').oneOf(type)));
 

@@ -1,0 +1,32 @@
+.p-event {
+    background: url("@{kv_poems}bg.jpg") center 64px #513149 no-repeat;
+    background-size: 1980px auto;
+}
+.p-event-content {
+    .flex;
+    .pt(400px);
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    .m-box {
+        .size(1000px,520px);
+        padding: 20px;
+        background: url("@{kv_poems}box.png") center center no-repeat;
+        background-size: 1040px 560px;
+    }
+    .m-carousel {
+        .clip;
+        .r(10px);
+        .size(1000px,520px);
+        .u-video {
+            .full;
+            iframe {
+                .full;
+            }
+        }
+    }
+    .el-carousel__indicators {
+        .none;
+    }
+}

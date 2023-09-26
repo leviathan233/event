@@ -27,6 +27,10 @@
         {
             "key": "blindbox",
             "title": "剑三盲盒"
+        },
+        {
+            "key": "poems",
+            "title": "剑三诗词大会"
         }
     ]
 }
