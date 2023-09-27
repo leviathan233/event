@@ -26,15 +26,27 @@
                     </div>
                 </div>
                 <div class="m-right">
-                    <div class="m-point">9999</div>
+                    <div class="m-point">{{ points }}</div>
                     <div class="m-prize box">
                         <div class="m-title">
                             <img :src="`${__imgRoot}prize.png`" alt="奖品一览" />
                         </div>
                         <div class="m-item">
-                            <div class="m-scroll-block" ref="scrollBlock" :style="{animationDuration}">
-                                <img v-for="(item, index) in prizeList" :key="`prize${index}`" @load="onLoadPrizeList" :src="item.url" :alt="item.name" />
-                                <img v-for="(item, index) in prizeList" :key="`prize_end${index}`" @load="onLoadPrizeList" :src="item.url" :alt="item.name" />
+                            <div class="m-scroll-block" ref="scrollBlock" :style="{ animationDuration }">
+                                <img
+                                    v-for="(item, index) in prizeList"
+                                    :key="`prize${index}`"
+                                    @load="onLoadPrizeList"
+                                    :src="item.url"
+                                    :alt="item.name"
+                                />
+                                <img
+                                    v-for="(item, index) in prizeList"
+                                    :key="`prize_end${index}`"
+                                    @load="onLoadPrizeList"
+                                    :src="item.url"
+                                    :alt="item.name"
+                                />
                                 <!--跑马灯效果需要展示两份图片以首尾衔接-->
                             </div>
                         </div>
@@ -69,11 +81,19 @@
 </template>
 
 <script>
+const KEY = "blindbox";
+import { getTopic } from "@/service/topic";
+import { getBlindBox } from "@/service/pay";
+import User from "@jx3box/jx3box-common/js/user";
 export default {
     name: "Index",
     inject: ["__imgRoot"],
     data: function () {
         return {
+            ID: 0,
+            isLogin: User.isLogin(),
+            prizeList: [],
+
             history: false,
             close: false,
             open: false,
@@ -82,15 +102,43 @@ export default {
             active: "",
             replay: 0,
             activeList: [],
-            prizeList: [],
-            animationDuration: '0s',
+
+            animationDuration: "0s",
         };
     },
-    computed: {},
+    computed: {
+        data: function () {
+            let _data = {};
+            this.raw.forEach((item) => {
+                if (!_data[item.subtype]) _data[item.subtype] = [];
+                _data[item.subtype].push(item);
+            });
+            return _data;
+        },
+        Asset() {
+            return User.getAsset();
+        },
+        points() {
+            console.log(this.Asset);
+            return this.isLogin ? 0 : "请登录";
+        },
+    },
     mounted() {
-        this.prizeList = [];
+        this.init();
     },
     methods: {
+        init() {
+            getTopic(KEY).then((res) => {
+                this.raw = res.data.data;
+                this.ID = ~~this.data.ID[0].title;
+                this.ID &&
+                    getBlindBox(this.ID).then((res) => {
+                        const data = res.data.data;
+                        console.log(data);
+                        this.prizeList = data.prize;
+                    });
+            });
+        },
         showBox(index) {
             return !this.activeList.includes(index);
         },
