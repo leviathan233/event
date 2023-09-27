@@ -47,7 +47,7 @@
                             alt="刷新盲盒"
                         />
                         <img :src="`${__imgRoot}random.png`" class="u-img random" alt="随机开盒" />
-                        <img :src="`${__imgRoot}open.png`" class="u-img open" alt="十连开盒" />
+                        <img :src="`${__imgRoot}open.png`" class="u-img open" @click="change(10)" alt="十连开盒" />
                         <div class="m-history box u-img" :class="{ history, close }">
                             <div class="m-title">
                                 <img :src="`${__imgRoot}history.png`" alt="开盒记录" @click="openHistory" />
@@ -61,7 +61,10 @@
         </div>
         <div class="m-goods" :class="{ active: show_goods }">
             <div class="m-item">
-                <div class="u-item box" v-for="item in 10" :key="item"></div>
+                <div class="u-item box" v-for="item in currentGetPrizeList" :key="item">
+                    <img :src="item.goods.goods_images[0]" class="u-img" alt="图片" />
+                    <div class="u-text">{{item.goods.title}}</div>
+                </div>
             </div>
             <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="show_goods = false" />
         </div>
@@ -69,6 +72,11 @@
 </template>
 
 <script>
+import { tryMyLucky, luckDetail } from "../../service/blindbox";
+
+const KEY = 'blindbox';
+import {getList } from '@/service/blindbox.js'
+import { getTopic } from "../../service/event";
 export default {
     name: "Index",
     inject: ["__imgRoot"],
@@ -83,12 +91,24 @@ export default {
             replay: 0,
             activeList: [],
             prizeList: [],
+            currentGetPrizeList: [],
             animationDuration: '0s',
+            timer: null,
+            eventId: null,
+            prizeImg: require('@/assets/img/prize.png')
         };
     },
     computed: {},
     mounted() {
         this.prizeList = [];
+        getTopic(KEY).then(res => {
+            console.log(res.data.data)
+            this.eventId = 5
+        })
+        getList().then(res => {
+            console.log(res.data)
+        })
+
     },
     methods: {
         showBox(index) {
@@ -102,13 +122,12 @@ export default {
             // 根据给的奖品参数计算动画时间两份图只滚动一份，所以/100再/2
             this.animationDuration = `${this.$refs.scrollBlock.offsetWidth / 200}s`;
         },
-        change(index) {
-            this.active = ~~index;
-            setTimeout(() => {
-                this.activeList.push(~~index);
-                this.show_goods = true;
-                this.active = "";
-            }, 1800);
+        change(index, type = 1) {
+            tryMyLucky(5, type).then(res => {
+                const luckyId = res.data.data.id
+                this.active = ~~index;
+                this.setTime(luckyId, index);
+            });
         },
         openHistory() {
             this.history = true;
@@ -118,6 +137,24 @@ export default {
             this.history = false;
             this.close = true;
         },
+        setTime(id, index) {
+            this.timer = setInterval(() => {
+                this.luckyDetail(id).then(res => {
+                    const status = res.data.data.status
+                    if (status == 1) {
+                        clearInterval(this.timer);
+                        this.timer = null
+                    } else if (status == 2) {
+                        this.activeList.push(~~index);
+                        this.show_goods = true;
+                        this.active = "";
+                        this.currentGetPrizeList = res.data.data.prizes;
+                    } else if (status == 3) {
+                        // 未中奖处理
+                    }
+                })
+            },1000)
+        }
     },
 };
 </script>
