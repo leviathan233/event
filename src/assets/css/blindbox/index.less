@@ -4,6 +4,13 @@
 .p-event-blindbox {
     .size(100%,1000px);
     .clip;
+    .m-mark {
+        .pf;
+        .full;
+        .lt(0);
+        .rb(0);
+        .z(9); 
+    }
     .m-bg {
         .size(103%);
         filter: blur(10px);
@@ -156,7 +163,7 @@
                 display: inline-block;
                 width: max-content;
                 animation: scroll_prize 0s linear infinite;
-                img{
+                img {
                     height: 100%;
                 }
             }
@@ -300,8 +307,12 @@
 }
 
 @keyframes scroll_prize {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
 }
 
 @keyframes open_history {

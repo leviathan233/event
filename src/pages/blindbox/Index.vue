@@ -1,12 +1,18 @@
 <template>
     <div class="p-event-blindbox">
+        <!-- 判断是否登录，没有登录跳转登录 -->
+        <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
+        <!-- 模糊背景 -->
         <el-image :src="`${__imgRoot}bg.png`" class="m-bg" fit="cover" />
+        <!-- 内容 -->
         <div class="p-event-content">
             <div class="m-content">
+                <!-- 左侧 -->
                 <div class="m-left">
                     <div class="logo">
                         <img :src="`${__imgRoot}logo.png`" alt="魔盒盲盒" />
                     </div>
+                    <!-- 抽奖盒子 -->
                     <div class="m-box">
                         <div
                             :class="['u-box', { active: index === active }]"
@@ -25,8 +31,11 @@
                         <div :class="['u-mark', { active }]"></div>
                     </div>
                 </div>
+                <!-- 右侧 -->
                 <div class="m-right">
+                    <!-- 积分现实 -->
                     <div class="m-point">{{ points }}</div>
+                    <!-- 奖品轮播 -->
                     <div class="m-prize box">
                         <div class="m-title">
                             <img :src="`${__imgRoot}prize.png`" alt="奖品一览" />
@@ -51,6 +60,7 @@
                             </div>
                         </div>
                     </div>
+                    <!-- 抽奖按钮 -->
                     <div class="m-lottery">
                         <img
                             :src="`${__imgRoot}refresh.png`"
@@ -91,8 +101,8 @@ export default {
     data: function () {
         return {
             ID: 0,
-            isLogin: User.isLogin(),
             prizeList: [],
+            points: 0,
 
             history: false,
             close: false,
@@ -115,18 +125,24 @@ export default {
             });
             return _data;
         },
-        Asset() {
-            return User.getAsset();
-        },
-        points() {
-            console.log(this.Asset);
-            return this.isLogin ? 0 : "请登录";
+        isLogin() {
+            return User.isLogin();
         },
     },
-    mounted() {
-        this.init();
+    watch: {
+        isLogin: {
+            immediate: true,
+            handler: function (val) {
+                val &&
+                    User.getAsset().then((res) => {
+                        this.points = res?.points || 0;
+                    });
+            },
+        },
     },
+
     methods: {
+        // 初始化，获取活动ID,并获取活动详情
         init() {
             getTopic(KEY).then((res) => {
                 this.raw = res.data.data;
@@ -134,7 +150,6 @@ export default {
                 this.ID &&
                     getBlindBox(this.ID).then((res) => {
                         const data = res.data.data;
-                        console.log(data);
                         this.prizeList = data.prize;
                     });
             });
@@ -142,6 +157,7 @@ export default {
         showBox(index) {
             return !this.activeList.includes(index);
         },
+        // 刷新box
         refreshBox() {
             this.activeList = [];
             this.replay++;
@@ -165,6 +181,15 @@ export default {
         closeHistory() {
             this.history = false;
             this.close = true;
+        },
+        toLogin() {
+            this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                User.toLogin();
+            });
         },
     },
 };
