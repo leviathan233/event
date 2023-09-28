@@ -9,7 +9,7 @@
         .full;
         .lt(0);
         .rb(0);
-        .z(9); 
+        .z(9);
     }
     .m-bg {
         .size(103%);
@@ -58,6 +58,9 @@
         .pa;
         .size(980px,460px);
         .lb(88px,0);
+        &.active .u-box .u-img {
+            animation: active_flash 2s;
+        }
         .u-box {
             .pa;
             .size(244px, 208px);
@@ -76,9 +79,6 @@
             }
             &.active .u-img {
                 animation: active_flash 2s;
-            }
-            .u-img {
-                opacity: 0;
             }
             &:nth-child(1) {
                 .lt(110px,0);
@@ -158,13 +158,18 @@
             .h(190px);
             overflow: hidden;
             .m-scroll-block {
+                .flex;
+                gap: 10px;
                 height: 100%;
                 white-space: nowrap;
-                display: inline-block;
                 width: max-content;
-                animation: scroll_prize 0s linear infinite;
+                animation: scroll_prize 2s linear infinite;
                 img {
+                    .r(8px);
                     height: 100%;
+                    border: 10px double #555;
+                    background-color: #24292e;
+                    box-sizing: border-box;
                 }
             }
         }
