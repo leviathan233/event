@@ -68,23 +68,28 @@
                         />
                         <img :src="`${__imgRoot}random.png`" class="u-img random" alt="随机开盒" @click="openBox" />
                         <img :src="`${__imgRoot}open.png`" class="u-img open" alt="十连开盒" @click="openBox('all')" />
+                        <!-- 中奖记录 -->
                         <div class="m-history box u-img" :class="{ history, close }">
                             <div class="m-title">
                                 <img :src="`${__imgRoot}history.png`" alt="开盒记录" @click="openHistory" />
                                 <img :src="`${__imgRoot}close.png`" class="u-close" alt="关闭" @click="closeHistory" />
                             </div>
-                            <div class="m-history-content"></div>
+                            <div class="m-history-content">
+                                <div class="m-item" v-for="(item, i) in historyList" :key="i">
+                                    {{ item }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="m-goods" :class="{ active: show_goods }">
+        <!-- <div class="m-goods" :class="{ active: show_goods }">
             <div class="m-item">
                 <div class="u-item box" v-for="item in 10" :key="item"></div>
             </div>
             <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="show_goods = false" />
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -92,7 +97,7 @@
 const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
-import { getBlindBox, goodLucky } from "@/service/pay";
+import { getBlindBox, goodLucky, getMyHistory, getMyLucky } from "@/service/pay";
 import { cloneDeep } from "lodash";
 export default {
     name: "Index",
@@ -110,8 +115,16 @@ export default {
             boxList: new Array(10).fill(1).map((item, index) => index + 1),
             activeList: [],
             replay: 0,
+            historyList: [],
+            status: {
+                0: "全部",
+                1: "抽奖中",
+                2: "中奖",
+                3: "未中奖",
+            },
 
             history: false,
+            pageSize: 30,
             close: false,
             open: false,
             show_goods: false,
@@ -164,6 +177,10 @@ export default {
                         });
                         this.refreshBox();
                     });
+                this.ID &&
+                    getMyHistory({ luckyDrawId: this.ID, pageSize: this.pageSize }).then((res) => {
+                        this.historyList = res.data.data;
+                    });
             });
         },
         showBox(index) {
@@ -204,6 +221,7 @@ export default {
                 const number = this.activeList[Math.floor(Math.random() * this.activeList.length)];
                 this.change(number);
             }
+            this.hasLucky();
         },
         toLogin() {
             this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {

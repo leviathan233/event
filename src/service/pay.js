@@ -6,14 +6,18 @@ function getMyHistory(params) {
     return $pay().get(`/lucky-draw/my/history`, { params });
 }
 
+// 获取我的中奖
+function getMyLucky(id, params) {
+    return $pay().get(`/lucky-draw/my/history/${id}/details`, { params });
+}
+
 // 所有抽奖列表
 function getLuckyList(params) {
     return $pay().get(`/lucky-draw/public/list`, { params });
 }
-
 // 获取活动详情
 function getBlindBox(id) {
-    return $pay().get(`/lucky-draw/public/details`, { params:{id} });
+    return $pay().get(`/lucky-draw/public/details`, { params: { id } });
 }
 
 // 抽奖
@@ -25,6 +29,7 @@ function goodLucky(id, data) {
 export {
     getMyHistory,
     getBlindBox,
+    getMyLucky,
     goodLucky,
     getLuckyList
 };
