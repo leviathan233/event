@@ -69,27 +69,32 @@
                         <img :src="`${__imgRoot}random.png`" class="u-img random" alt="随机开盒" @click="openBox" />
                         <img :src="`${__imgRoot}open.png`" class="u-img open" alt="十连开盒" @click="openBox('all')" />
                         <!-- 中奖记录 -->
-                        <div class="m-history box u-img" :class="{ history, close }">
+                        <div class="m-history box u-img" :class="history ? 'history' : 'close'">
                             <div class="m-title">
                                 <img :src="`${__imgRoot}history.png`" alt="开盒记录" @click="openHistory" />
                                 <img :src="`${__imgRoot}close.png`" class="u-close" alt="关闭" @click="closeHistory" />
                             </div>
-                            <div class="m-history-content">
-                                <div class="m-item" v-for="(item, i) in historyList" :key="i">
-                                    {{ item }}
-                                </div>
-                            </div>
+                            <History :id="ID" :show="history" @update="showPrizes" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <div class="m-goods" :class="{ active: show_goods }">
+        <div class="m-goods" :class="{ active: hasPrize }">
             <div class="m-item">
-                <div class="u-item box" v-for="item in 10" :key="item"></div>
+                <div class="u-item box" v-for="(item, i) in myPrizes" :key="i">
+                    <template v-if="item.prize_type == 'vip_asset'">
+                        <img :src="`${__imgRoot}points.png`" />
+                        <span>{{ item.vip_asset_once_give }}</span>
+                    </template>
+                    <template v-else>
+                        <img :src="item.goods.goods_images[0]" />
+                        <span>{{ item.goods.title }}</span>
+                    </template>
+                </div>
             </div>
-            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="show_goods = false" />
-        </div> -->
+            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="hasPrize = false" />
+        </div>
     </div>
 </template>
 
@@ -97,8 +102,9 @@
 const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
-import { getBlindBox, goodLucky, getMyHistory, getMyLucky } from "@/service/pay";
+import { getBlindBox, goodLucky, getMyLucky } from "@/service/pay";
 import { cloneDeep } from "lodash";
+import History from "./History.vue";
 export default {
     name: "Index",
     inject: ["__imgRoot"],
@@ -124,11 +130,14 @@ export default {
             },
 
             history: false,
-            pageSize: 30,
             close: false,
-            open: false,
-            show_goods: false,
+
+            hasPrize: false,
+            myPrizes: [],
         };
+    },
+    components: {
+        History,
     },
     computed: {
         data: function () {
@@ -177,12 +186,9 @@ export default {
                         });
                         this.refreshBox();
                     });
-                this.ID &&
-                    getMyHistory({ luckyDrawId: this.ID, pageSize: this.pageSize }).then((res) => {
-                        this.historyList = res.data.data;
-                    });
             });
         },
+        // 显示抽奖盒子
         showBox(index) {
             return this.activeList.includes(index + 1);
         },
@@ -192,37 +198,40 @@ export default {
             this.activeList = cloneDeep(this.boxList);
             this.replay++;
         },
+        // 奖品滚动速度
         onLoadPrizeList() {
             // 根据给的奖品参数计算动画时间两份图只滚动一份，所以/100再/2
             this.animationDuration = `${this.$refs.scrollBlock.offsetWidth / 60}s`;
         },
+        // 选择盒子抽奖
         change(number) {
             this.active = number;
             setTimeout(() => {
                 this.activeList = this.activeList.filter((item) => item !== number);
                 this.show_goods = true;
             }, 1800);
+            this.hasLucky();
         },
         openHistory() {
             this.history = true;
-            this.close = false;
         },
         closeHistory() {
             this.history = false;
-            this.close = true;
         },
+        // 打开盒子
         openBox(key) {
             if (key === "all") {
                 this.allActive = true;
                 setTimeout(() => {
                     this.activeList = [];
                 }, 1800);
+                this.hasLucky();
             } else {
                 const number = this.activeList[Math.floor(Math.random() * this.activeList.length)];
                 this.change(number);
             }
-            this.hasLucky();
         },
+        // 登录
         toLogin() {
             this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {
                 confirmButtonText: "确定",
@@ -232,11 +241,23 @@ export default {
                 User.toLogin();
             });
         },
+        // 抽奖
         hasLucky() {
             let batch = 1;
             if (this.allActive) batch = 10;
-            goodLucky(this.ID, { batch }).then((res) => {
-                console.log(res);
+            goodLucky(this.ID, batch).then((res) => {
+                const _id = res.data?.data.id;
+                this.showPrizes(_id);
+                this.allActive = false;
+            });
+        },
+        // 显示中奖
+        showPrizes(id) {
+            if (!id) return;
+            getMyLucky(id).then((res) => {
+                this.myPrizes = res.data?.data.prizes || [];
+                console.log(this.myPrizes);
+                if (this.myPrizes.length) this.hasPrize = true;
             });
         },
     },

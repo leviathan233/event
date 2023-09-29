@@ -7,8 +7,8 @@ function getMyHistory(params) {
 }
 
 // 获取我的中奖
-function getMyLucky(id, params) {
-    return $pay().get(`/lucky-draw/my/history/${id}/details`, { params });
+function getMyLucky(id) { 
+    return $pay().get(`/lucky-draw/my/history/${id}/details`);
 }
 
 // 所有抽奖列表
@@ -21,8 +21,8 @@ function getBlindBox(id) {
 }
 
 // 抽奖
-function goodLucky(id, data) {
-    return $pay().post(`/lucky-draw/public/item/${id}/try-my-lucky`, data);
+function goodLucky(id, batch) {
+    return $pay().post(`/lucky-draw/public/item/${id}/try-my-lucky?batch=${batch}`);
 }
 
 

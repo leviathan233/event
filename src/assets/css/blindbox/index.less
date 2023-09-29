@@ -214,6 +214,7 @@
                     .pa;
                     .rt(0);
                     .size(42px,81px);
+                    .z(1);
                 }
             }
             .m-history-content {
@@ -263,7 +264,11 @@
         flex-wrap: wrap;
         gap: 30px;
         .u-item {
+            .flex;
             .size(200px,240px);
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             box-sizing: border-box;
         }
     }
