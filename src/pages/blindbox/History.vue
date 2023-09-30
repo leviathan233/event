@@ -1,6 +1,6 @@
 <template>
     <div class="m-history-content">
-        <el-table class="m-table-box" :data="list">
+        <el-table class="m-table-box" :data="list" v-loading="loading">
             <el-table-column prop="created_at" label="抽奖时间"></el-table-column>
             <el-table-column prop="chance_count" label="抽奖次数" width="80px"></el-table-column>
             <el-table-column label="状态">
@@ -18,6 +18,16 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination
+            class="m-archive-pages"
+            background
+            layout="prev, pager, next"
+            :hide-on-single-page="true"
+            :page-size="pageSize"
+            :total="total"
+            :current-page.sync="index"
+            @current-change="change"
+        ></el-pagination>
     </div>
 </template>
 
@@ -31,26 +41,37 @@ export default {
         return {
             list: [],
             index: 0,
-            pageSize: 20,
+            pageSize: 7,
+            loading: false,
         };
     },
     watch: {
         show: {
             immediate: true,
             handler: function (_id) {
-                _id && this.load(_id);
+                _id && this.load(this.id);
             },
         },
     },
     methods: {
         load(luckyDrawId) {
+            this.loading = true;
             const params = { luckyDrawId, pageSize: this.pageSize, index: this.index };
-            getMyHistory(params).then((res) => {
-                this.list = res.data.data.list;
-            });
+            getMyHistory(params)
+                .then((res) => {
+                    this.list = res.data.data.list;
+                    this.total = res.data.data.page.total;
+                })
+                .finally(() => {
+                    this.loading = false;
+                });
         },
         look(id) {
             this.$emit("update", id);
+        },
+        change(i) {
+            this.index = i;
+            this.load(this.id);
         },
     },
 };
@@ -58,15 +79,26 @@ export default {
 
 <style lang="less">
 .m-history-content {
-    .flex;
-    .pt(20px);
-    flex-direction: column;
-    .cell {
+    .cell,
+    .m-archive-pages {
         .x;
     }
-    .m-table-box {
-        height: 400px;
-        overflow: auto;
+    .el-pagination.is-background .btn-next,
+    .el-pagination.is-background .btn-prev {
+        background: url("@{kv_blindbox}arr.png") center center no-repeat;
+        background-size: 24px auto;
+        .el-icon {
+            .none;
+        }
+    }
+    .el-pagination.is-background .btn-next {
+        transform: rotate(180deg);
+    }
+    .el-pagination.is-background .el-pager li:not(.disabled).active {
+        background-color: #000;
+    }
+    .el-loading-mask{
+        .z(2);
     }
 }
 </style>

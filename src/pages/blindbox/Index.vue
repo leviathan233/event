@@ -115,7 +115,7 @@
                     <span>感谢参与</span>
                 </div>
             </div>
-            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="hasPrize = false" />
+            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="closePrize" />
         </div>
     </div>
 </template>
@@ -221,6 +221,16 @@ export default {
                     });
             });
         },
+        // 登录
+        toLogin() {
+            this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                type: "warning",
+            }).then(() => {
+                User.toLogin();
+            });
+        },
         // 显示抽奖盒子
         showBox(index) {
             return this.activeList.includes(index + 1);
@@ -236,6 +246,22 @@ export default {
             // 根据给的奖品参数计算动画时间两份图只滚动一份，所以/100再/2
             this.animationDuration = `${this.$refs.scrollBlock.offsetWidth / 60}s`;
         },
+
+        // 打开盒子
+        openBox: throttle(function (key) {
+            if (key === "all") {
+                this.allActive = true;
+                setTimeout(() => {
+                    this.activeList = [];
+                    this.hasPrize = true;
+                    this.allActive = false;
+                }, 1600);
+                this.hasLucky();
+            } else {
+                const number = this.activeList[Math.floor(Math.random() * this.activeList.length)];
+                this.change(number);
+            }
+        }, 1000),
         // 选择盒子抽奖
         change(number) {
             this.active = number;
@@ -248,53 +274,33 @@ export default {
             }, 1600);
             this.hasLucky();
         },
-        openHistory() {
-            this.history = true;
-        },
-        closeHistory() {
-            this.history = false;
-        },
-        // 打开盒子
-        openBox: throttle(function (key) {
-            if (key === "all") {
-                this.allActive = true;
-                setTimeout(() => {
-                    this.activeList = [];
-                    this.hasPrize = true;
-                    this.allActive = false;
-                }, 1800);
-                this.hasLucky();
-            } else {
-                const number = this.activeList[Math.floor(Math.random() * this.activeList.length)];
-                this.change(number);
-            }
-        }, 1000),
-
-        // 登录
-        toLogin() {
-            this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {
-                confirmButtonText: "确定",
-                cancelButtonText: "取消",
-                type: "warning",
-            }).then(() => {
-                User.toLogin();
-            });
-        },
         // 抽奖
         hasLucky() {
             let batch = 1;
             if (this.allActive) batch = 10;
             goodLucky(this.ID, batch).then((res) => {
                 const _id = res.data?.data.id;
-                this.showPrizes(_id);
+                this.showPrizes(_id, { show: true });
             });
         },
-        // 显示中奖
-        showPrizes(id) {
+        // 查询中奖
+        showPrizes(id, show) {
             if (!id) return;
+            if (!show) this.hasPrize = true;
             getMyLucky(id).then((res) => {
                 this.myPrizes = res.data?.data.prizes || [];
             });
+        },
+        // 关闭奖品弹窗
+        closePrize() {
+            this.hasPrize = false;
+            this.myPrizes = [];
+        },
+        openHistory() {
+            this.history = true;
+        },
+        closeHistory() {
+            this.history = false;
         },
     },
 };

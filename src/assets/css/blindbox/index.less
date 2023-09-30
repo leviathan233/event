@@ -245,6 +245,7 @@
             .lb(-188px,0);
             min-height: 50px;
             min-width: 168px;
+            .clip;
             .m-title {
                 .pr;
                 .flex;
@@ -256,17 +257,25 @@
                     .pa;
                     .rt(0);
                     .size(42px,81px);
-                    .z(1);
+                    .z(3);
                 }
             }
             .m-history-content {
-                .none;
                 .size(600px,500px);
+                .pb(15px);
+                flex-direction: column;
+                justify-content: space-between;
+                .none;
+                .el-table::before {
+                    background: transparent;
+                }
             }
             &.history {
                 animation: open_history 1s;
                 left: -640px;
-                .m-history-content,
+                .m-history-content {
+                    .flex;
+                }
                 .u-close {
                     .db;
                 }
