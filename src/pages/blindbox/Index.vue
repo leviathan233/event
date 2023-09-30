@@ -3,14 +3,14 @@
         <!-- 判断是否登录，没有登录跳转登录 -->
         <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
         <!-- 模糊背景 -->
-        <el-image :src="`${__imgRoot}bg.png`" class="m-bg" fit="cover" />
+        <el-image :src="`${__imgRoot}bg.jpg`" class="m-bg" fit="cover" />
         <!-- 内容 -->
         <div class="p-event-content">
             <div class="m-content">
                 <!-- 左侧 -->
                 <div class="m-left">
                     <div class="logo">
-                        <img :src="`${__imgRoot}logo.png`" alt="魔盒盲盒" />
+                        <img :src="`${__imgRoot}logo.svg`" alt="魔盒盲盒" />
                     </div>
                     <!-- 抽奖盒子 -->
                     <div class="m-box" :class="{ active: allActive }">
@@ -22,13 +22,13 @@
                         >
                             <img
                                 :class="`u-img u-img-${index + 1}`"
-                                :src="`${__imgRoot}box.png`"
+                                :src="`${__imgRoot}box.svg`"
                                 alt="奖品"
                                 :key="replay + 'box' + index"
                                 v-show="showBox(index)"
                             />
                         </div>
-                        <div :class="['u-mark', { active }]"></div>
+                        <div class="u-mark" :class="{ active: mark || !activeList.length }"></div>
                     </div>
                 </div>
                 <!-- 右侧 -->
@@ -38,7 +38,7 @@
                     <!-- 奖品轮播 -->
                     <div class="m-prize box">
                         <div class="m-title">
-                            <img :src="`${__imgRoot}prize.png`" alt="奖品一览" />
+                            <img :src="`${__imgRoot}prize.svg`" alt="奖品一览" />
                         </div>
                         <div class="m-item">
                             <div class="m-scroll-block" ref="scrollBlock" :style="{ animationDuration }">
@@ -61,18 +61,34 @@
                     <!-- 抽奖按钮 -->
                     <div class="m-lottery">
                         <img
-                            :src="`${__imgRoot}refresh.png`"
+                            :src="`${__imgRoot}refresh.svg`"
                             class="u-img refresh"
                             @click="refreshBox"
                             alt="刷新盲盒"
                         />
-                        <img :src="`${__imgRoot}random.png`" class="u-img random" alt="随机开盒" @click="openBox" />
-                        <img :src="`${__imgRoot}open.png`" class="u-img open" alt="十连开盒" @click="openBox('all')" />
+                        <div class="m-random u-img" :class="{ disabled: !activeList.length }" @click="openBox">
+                            <span class="u-price"> x {{ draw[1] }}</span>
+                        </div>
+                        <div class="m-open u-img" :class="{ disabled: !activeList.length }" @click="openBox('all')">
+                            <span class="u-price u-discount"> x {{ draw[10] }}</span>
+                            <span class="u-price"> x {{ draw[1] * 10 }}</span>
+                        </div>
                         <!-- 中奖记录 -->
                         <div class="m-history box u-img" :class="history ? 'history' : 'close'">
                             <div class="m-title">
-                                <img :src="`${__imgRoot}history.png`" alt="开盒记录" @click="openHistory" />
-                                <img :src="`${__imgRoot}close.png`" class="u-close" alt="关闭" @click="closeHistory" />
+                                <img
+                                    :src="`${__imgRoot}history.png`"
+                                    width="120px"
+                                    alt="开盒记录"
+                                    @click="openHistory"
+                                />
+                                <img
+                                    :src="`${__imgRoot}close.png`"
+                                    width="42px"
+                                    class="u-close"
+                                    alt="关闭"
+                                    @click="closeHistory"
+                                />
                             </div>
                             <History :id="ID" :show="history" @update="showPrizes" />
                         </div>
@@ -82,15 +98,21 @@
         </div>
         <div class="m-goods" :class="{ active: hasPrize }">
             <div class="m-item">
-                <div class="u-item box" v-for="(item, i) in myPrizes" :key="i">
-                    <template v-if="item.prize_type == 'vip_asset'">
-                        <img :src="`${__imgRoot}points.png`" />
-                        <span>{{ item.vip_asset_once_give }}</span>
-                    </template>
-                    <template v-else>
-                        <img :src="item.goods.goods_images[0]" />
-                        <span>{{ item.goods.title }}</span>
-                    </template>
+                <template v-if="myPrizes.length">
+                    <div class="u-item box" v-for="(item, i) in myPrizes" :key="i">
+                        <template v-if="item.prize_type == 'vip_asset'">
+                            <img class="u-img" :src="`${__imgRoot}points.png`" />
+                            <span>{{ item.vip_asset_once_give + asset[item.vip_asset_type] }}</span>
+                        </template>
+                        <template v-else>
+                            <img class="u-img" :src="item.goods.goods_images[0]" />
+                            <span>{{ item.goods.title }}</span>
+                        </template>
+                    </div>
+                </template>
+                <div class="u-item box" v-else>
+                    <img class="u-img" :src="`${__imgRoot}thanks.png`" />
+                    <span>感谢参与</span>
                 </div>
             </div>
             <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="hasPrize = false" />
@@ -103,14 +125,16 @@ const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
 import { getBlindBox, goodLucky, getMyLucky } from "@/service/pay";
-import { cloneDeep } from "lodash";
+import { cloneDeep, throttle } from "lodash";
 import History from "./History.vue";
 export default {
     name: "Index",
     inject: ["__imgRoot"],
     data: function () {
         return {
+            raw: {},
             ID: 0,
+            draw: {},
             prizeList: [],
             points: 0,
             index: 0,
@@ -128,7 +152,13 @@ export default {
                 2: "中奖",
                 3: "未中奖",
             },
+            asset: {
+                boxcoin: "盒币（重制）",
+                boxcoin_origin: "盒币（缘起）",
+                point: "积分",
+            },
 
+            mark: false,
             history: false,
             close: false,
 
@@ -172,6 +202,9 @@ export default {
             getTopic(KEY).then((res) => {
                 this.raw = res.data.data;
                 this.ID = ~~this.data.ID[0].title;
+                this.draw = this.data.draw.reduce((acc, cur) => {
+                    return { ...acc, [cur.title]: cur.desc };
+                }, {});
                 this.ID &&
                     getBlindBox(this.ID).then((res) => {
                         const data = res.data.data;
@@ -206,10 +239,13 @@ export default {
         // 选择盒子抽奖
         change(number) {
             this.active = number;
+            this.mark = true;
             setTimeout(() => {
                 this.activeList = this.activeList.filter((item) => item !== number);
-                this.show_goods = true;
-            }, 1800);
+                this.hasPrize = true;
+                this.mark = false;
+                this.active = "";
+            }, 1600);
             this.hasLucky();
         },
         openHistory() {
@@ -219,18 +255,21 @@ export default {
             this.history = false;
         },
         // 打开盒子
-        openBox(key) {
+        openBox: throttle(function (key) {
             if (key === "all") {
                 this.allActive = true;
                 setTimeout(() => {
                     this.activeList = [];
+                    this.hasPrize = true;
+                    this.allActive = false;
                 }, 1800);
                 this.hasLucky();
             } else {
                 const number = this.activeList[Math.floor(Math.random() * this.activeList.length)];
                 this.change(number);
             }
-        },
+        }, 1000),
+
         // 登录
         toLogin() {
             this.$confirm("参与抽奖必须登录, 是否登录?", "提示", {
@@ -248,7 +287,6 @@ export default {
             goodLucky(this.ID, batch).then((res) => {
                 const _id = res.data?.data.id;
                 this.showPrizes(_id);
-                this.allActive = false;
             });
         },
         // 显示中奖
@@ -256,8 +294,6 @@ export default {
             if (!id) return;
             getMyLucky(id).then((res) => {
                 this.myPrizes = res.data?.data.prizes || [];
-                console.log(this.myPrizes);
-                if (this.myPrizes.length) this.hasPrize = true;
             });
         },
     },
