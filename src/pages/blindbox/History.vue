@@ -42,6 +42,7 @@ export default {
             list: [],
             index: 0,
             pageSize: 7,
+            total:0,
             loading: false,
         };
     },
