@@ -74,10 +74,18 @@
                             @click="refreshBox"
                             alt="刷新盲盒"
                         />
-                        <div class="m-random u-img" :class="{ disabled: !activeList.length }" @click="openBox">
+                        <div
+                            class="m-random u-img"
+                            :class="{ disabled: !activeList.length || points < draw[1] }"
+                            @click="openBox"
+                        >
                             <span class="u-price"> x {{ draw[1] }}</span>
                         </div>
-                        <div class="m-open u-img" :class="{ disabled: !activeList.length }" @click="openBox('all')">
+                        <div
+                            class="m-open u-img"
+                            :class="{ disabled: !activeList.length || points < draw[10] }"
+                            @click="openBox('all')"
+                        >
                             <span class="u-price u-discount"> x {{ draw[10] }}</span>
                             <span class="u-price"> x {{ draw[1] * 10 }}</span>
                         </div>
