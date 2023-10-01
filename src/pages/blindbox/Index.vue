@@ -118,7 +118,7 @@
                         </template>
                     </div>
                 </template>
-                <div class="u-item box" v-if="!history">
+                <div class="u-item box" v-if="!history && !myPrizes.length">
                     <img class="u-img" :src="`${__imgRoot}thanks.png`" />
                     <span>感谢参与</span>
                 </div>
@@ -206,10 +206,7 @@ export default {
         isLogin: {
             immediate: true,
             handler: function (val) {
-                val &&
-                    User.getAsset().then((res) => {
-                        this.points = res?.points || 0;
-                    });
+                val && this.myPoints();
             },
         },
     },
@@ -259,6 +256,12 @@ export default {
         // 返回奖品链接
         aLink({ id }) {
             return id ? __Root + "vip/mall/" + id : "";
+        },
+        // 获取积分
+        myPoints() {
+            User.getAsset().then((res) => {
+                this.points = res?.points || 0;
+            });
         },
         // 滚动
         scroll() {
@@ -314,6 +317,7 @@ export default {
             goodLucky(this.ID, batch).then((res) => {
                 const _id = res.data?.data.id;
                 this.showPrizes(_id, { show: true });
+                this.myPoints();
             });
         },
         // 查询中奖
