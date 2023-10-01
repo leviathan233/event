@@ -155,24 +155,32 @@
             align-items: center;
             height: 40px;
             padding: 0 20px;
+            .u-prize {
+                .size(110px,18px);
+            }
         }
-        .m-item {
+        .seamless-warp {
             .h(190px);
-            overflow: hidden;
-            .m-scroll-block {
+            .clip;
+        }
+        .m-scroll {
+            .size(446px,190px);
+            .clip;
+            .m-scroll-box {
                 .flex;
                 gap: 10px;
-                height: 100%;
-                white-space: nowrap;
-                width: max-content;
-                animation: scroll_prize 2s linear infinite;
-                img {
+                .m-item {
+                    .clip;
                     .r(8px);
-                    height: 100%;
+                    .size(190px);
+                    flex-shrink: 0;
                     border: 10px double #555;
                     background-color: #24292e;
                     box-sizing: border-box;
                 }
+            }
+            img {
+                .full;
             }
         }
     }
@@ -243,9 +251,13 @@
         .m-history {
             .pa;
             .lb(-188px,0);
+            .z(5);
             min-height: 50px;
             min-width: 168px;
             .clip;
+            .u-history {
+                .size(110px,24px);
+            }
             .m-title {
                 .pr;
                 .flex;

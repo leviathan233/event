@@ -35,26 +35,34 @@
                 <div class="m-right">
                     <!-- 积分现实 -->
                     <div class="m-point">{{ points }}</div>
-                    <!-- 奖品轮播 -->
+                    <!-- 奖品 -->
                     <div class="m-prize box">
                         <div class="m-title">
-                            <img :src="`${__imgRoot}prize.svg`" alt="奖品一览" />
+                            <img :src="`${__imgRoot}prize.png`" class="u-prize" alt="奖品一览" />
                         </div>
-                        <div class="m-item">
-                            <div class="m-scroll-block" ref="scrollBlock" :style="{ animationDuration }">
-                                <img
+                        <!-- 展示奖品 -->
+                        <div class="m-scroll">
+                            <div class="m-scroll-box" ref="scroll">
+                                <a
+                                    :href="aLink(item)"
                                     v-for="(item, index) in prizeList"
-                                    :key="`prize${index}`"
-                                    @load="onLoadPrizeList"
-                                    :src="item"
-                                />
-                                <img
+                                    :key="index"
+                                    target="_blank"
+                                    :data-index="index"
+                                    class="m-item"
+                                >
+                                    <img :src="item.img" />
+                                </a>
+                                <a
+                                    :href="aLink(item)"
                                     v-for="(item, index) in prizeList"
-                                    :key="`prize_end${index}`"
-                                    @load="onLoadPrizeList"
-                                    :src="item"
-                                />
-                                <!--跑马灯效果需要展示两份图片以首尾衔接-->
+                                    :key="'v' + index"
+                                    target="_blank"
+                                    :data-index="index"
+                                    class="m-item"
+                                >
+                                    <img :src="item.img" />
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -78,7 +86,7 @@
                             <div class="m-title">
                                 <img
                                     :src="`${__imgRoot}history.png`"
-                                    width="120px"
+                                    class="u-history"
                                     alt="开盒记录"
                                     @click="openHistory"
                                 />
@@ -110,23 +118,25 @@
                         </template>
                     </div>
                 </template>
-                <div class="u-item box" v-else>
+                <div class="u-item box" v-if="!history">
                     <img class="u-img" :src="`${__imgRoot}thanks.png`" />
                     <span>感谢参与</span>
                 </div>
             </div>
-            <img :src="`${__imgRoot}get.png`" class="u-get" alt="拿下" @click="closePrize" />
+            <img :src="`${__imgRoot}${history ? 'ok' : 'get'}.png`" class="u-get" alt="拿下" @click="closePrize" />
         </div>
     </div>
 </template>
 
 <script>
+let x = 0;
 const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
 import { getBlindBox, goodLucky, getMyLucky } from "@/service/pay";
 import { cloneDeep, throttle } from "lodash";
 import History from "./History.vue";
+import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
     name: "Index",
     inject: ["__imgRoot"],
@@ -139,7 +149,6 @@ export default {
             points: 0,
             index: 0,
 
-            animationDuration: "0s",
             active: "",
             allActive: false,
             boxList: new Array(10).fill(1).map((item, index) => index + 1),
@@ -164,6 +173,8 @@ export default {
 
             hasPrize: false,
             myPrizes: [],
+
+            scrollInterval: null,
         };
     },
     components: {
@@ -181,6 +192,15 @@ export default {
         isLogin() {
             return User.isLogin();
         },
+        optionLeft() {
+            return {
+                step: 0.8,
+                direction: 2, // 0向下 1向上 2向左 3向右
+                // limitMoveNum: this.dataList.length,// 开始无缝滚动的数据量 this.dataList.length
+                hoverStop: true,
+                openTouch: false,
+            };
+        },
     },
     watch: {
         isLogin: {
@@ -195,6 +215,7 @@ export default {
     },
     mounted() {
         this.init();
+        this.scrollInterval = setInterval(this.scroll, 100);
     },
     methods: {
         // 初始化，获取活动ID,并获取活动详情
@@ -214,8 +235,8 @@ export default {
                         };
                         this.prizeList = data.prize.map((item) => {
                             if (item.prize_type != "mall_goods" && asset[item.vip_asset_type])
-                                return asset[item.vip_asset_type];
-                            return item.mall_goods.goods_images[0];
+                                return { img: asset[item.vip_asset_type] };
+                            return { id: item.mall_goods.id, img: item.mall_goods.goods_images[0] };
                         });
                         this.refreshBox();
                     });
@@ -235,18 +256,30 @@ export default {
         showBox(index) {
             return this.activeList.includes(index + 1);
         },
+        // 返回奖品链接
+        aLink({ id }) {
+            return id ? __Root + "vip/mall/" + id : "";
+        },
+        // 滚动
+        scroll() {
+            let all = 0;
+            let count = this.$refs.scroll.childElementCount;
+            for (let i = 0; i < count; i++) {
+                all += this.$refs.scroll.children[i].offsetWidth;
+            }
+            let half = all >> 1;
+            if (x < 1 - half) {
+                x = 0;
+            }
+            x -= 2;
+            this.$refs.scroll.style.transform = "translateX(" + x + "px)";
+        },
         // 刷新box
         refreshBox() {
             this.allActive = false;
             this.activeList = cloneDeep(this.boxList);
             this.replay++;
         },
-        // 奖品滚动速度
-        onLoadPrizeList() {
-            // 根据给的奖品参数计算动画时间两份图只滚动一份，所以/100再/2
-            this.animationDuration = `${this.$refs.scrollBlock.offsetWidth / 60}s`;
-        },
-
         // 打开盒子
         openBox: throttle(function (key) {
             if (key === "all") {
@@ -302,6 +335,9 @@ export default {
         closeHistory() {
             this.history = false;
         },
+    },
+    destroyed() {
+        clearInterval(this.scrollInterval);
     },
 };
 </script>
