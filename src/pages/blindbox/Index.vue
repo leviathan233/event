@@ -134,7 +134,7 @@ const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
 import { getBlindBox, goodLucky, getMyLucky } from "@/service/pay";
-import { cloneDeep, throttle } from "lodash";
+import { cloneDeep, debounce } from "lodash";
 import History from "./History.vue";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
@@ -281,7 +281,7 @@ export default {
             this.replay++;
         },
         // 打开盒子
-        openBox: throttle(function (key) {
+        openBox: debounce(function (key) {
             if (key === "all") {
                 this.allActive = true;
                 setTimeout(() => {
