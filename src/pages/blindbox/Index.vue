@@ -1,7 +1,5 @@
 <template>
     <div class="p-event-blindbox">
-        <!-- 判断是否登录，没有登录跳转登录 -->
-        <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
         <!-- 模糊背景 -->
         <el-image :src="`${__imgRoot}bg.jpg`" class="m-bg" fit="cover" />
         <!-- 内容 -->
@@ -11,6 +9,16 @@
                 <div class="m-left">
                     <div class="logo">
                         <img :src="`${__imgRoot}logo.svg`" alt="魔盒盲盒" />
+                        <el-tooltip effect="light" placement="right-start">
+                            <img class="u-info" :src="`${__imgRoot}desc.png`" alt="活动说明" />
+                            <div class="m-blindbox-info" slot="content">
+                                <h2>活动说明：</h2>
+                                <span>1.点击盲盒或者右侧按钮可以打开盲盒，每次消耗一定数量的银铛；</span>
+                                <span>2.虚拟奖品奖励将实时到账，请注意查收站内信息；</span>
+                                <span>3.实体奖品需要填写收件信息，并在中奖后7个工作日内发货，请耐心等待；</span>
+                                <span>4.本活动最终解释权归魔盒团队所有。</span>
+                            </div>
+                        </el-tooltip>
                     </div>
                     <!-- 抽奖盒子 -->
                     <div class="m-box" :class="{ active: allActive }">
@@ -28,6 +36,7 @@
                                 v-show="showBox(index)"
                             />
                         </div>
+                        <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
                         <div class="u-mark" :class="{ active: mark || !activeList.length }"></div>
                     </div>
                 </div>
@@ -68,6 +77,7 @@
                     </div>
                     <!-- 抽奖按钮 -->
                     <div class="m-lottery">
+                        <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
                         <img
                             :src="`${__imgRoot}refresh.svg`"
                             class="u-img refresh"
@@ -106,6 +116,7 @@
                                     @click="closeHistory"
                                 />
                             </div>
+                            <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
                             <History :id="ID" :show="history" @update="showPrizes" />
                         </div>
                     </div>
@@ -268,6 +279,7 @@ export default {
         // 获取积分
         myPoints() {
             User.getAsset().then((res) => {
+                console.log(res);
                 this.points = res?.points || 0;
             });
         },

@@ -29,7 +29,21 @@ module.exports = {
     //❤️ Porxy ~
     devServer: {
         proxy: {
-
+            "api/vip": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function(request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/pay": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function(request) {
+                    request.setHeader("origin", "");
+                },
+                pathRewrite: {
+                    '^/api/pay': '/api'
+                }
+            },
             "/api/team": {
                 target: "https://team.api.jx3box.com",
                 onProxyReq: function(request) {
@@ -40,12 +54,6 @@ module.exports = {
                 target: process.env["DEV_SERVER"] == "true" ? "http://localhost:5120" : "https://cms.jx3box.com",
             },
 
-            "/api/pay": {
-                target: "https://pay.jx3box.com",
-                onProxyReq: function(request) {
-                    request.setHeader("origin", "");
-                }, 
-            },
             "/api": {
                 target: "https://next2.jx3box.com",
                 onProxyReq: function(request) {

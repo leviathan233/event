@@ -5,7 +5,7 @@
     .size(100%,1000px);
     .clip;
     .m-mark {
-        .pf;
+        .pa;
         .full;
         .lt(0);
         .rb(0);
@@ -53,7 +53,15 @@
     .clip;
     flex: 1;
     .logo {
+        .pr;
+        .w(490px);
         margin: 80px 0 0 50px;
+        .u-info {
+            .pa;
+            .pointer;
+            .rt(-44px,0);
+            .size(44px);
+        }
     }
     .m-box {
         .pa;
@@ -122,6 +130,10 @@
             &.active {
                 .db;
             }
+        }
+        .m-mark{
+            .size(110%);
+            .lt(-40px,-50px);
         }
     }
 }
@@ -350,6 +362,16 @@
     .u-get {
         .pointer;
         .size(200px,60px);
+    }
+}
+.m-blindbox-info {
+    .flex;
+    .fz(14px);
+    flex-direction: column;
+    gap: 5px;
+    h2 {
+        .fz(18px);
+        margin: 0;
     }
 }
 .drop(@n, @i: 1) when (@i =< @n) {
