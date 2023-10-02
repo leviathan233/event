@@ -35,15 +35,6 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
-            "/pay/api": {
-                target: "https://pay.jx3box.com",
-                onProxyReq: function(request) {
-                    request.setHeader("origin", "");
-                },
-                pathRewrite: {
-                    '^/pay/api': '/api'
-                }
-            },
             "/api/team": {
                 target: "https://team.api.jx3box.com",
                 onProxyReq: function(request) {
@@ -56,6 +47,12 @@ module.exports = {
 
             "/api": {
                 target: "https://next2.jx3box.com",
+                onProxyReq: function(request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/": {
+                target: "https://pay.jx3box.com/api/",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
