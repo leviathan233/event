@@ -35,13 +35,13 @@ module.exports = {
                     request.setHeader("origin", "");
                 },
             },
-            "/api/pay": {
+            "/pay/api": {
                 target: "https://pay.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
                 pathRewrite: {
-                    '^/api/pay': '/api'
+                    '^/pay/api': '/api'
                 }
             },
             "/api/team": {
