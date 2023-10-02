@@ -29,7 +29,13 @@ module.exports = {
     //❤️ Porxy ~
     devServer: {
         proxy: {
-            "api/vip": {
+            "/api/lucky-draw": {
+                target: "https://pay.jx3box.com",
+                onProxyReq: function(request) {
+                    request.setHeader("origin", "");
+                },
+            },
+            "/api/vip": {
                 target: "https://pay.jx3box.com",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
@@ -47,12 +53,6 @@ module.exports = {
 
             "/api": {
                 target: "https://next2.jx3box.com",
-                onProxyReq: function(request) {
-                    request.setHeader("origin", "");
-                },
-            },
-            "/": {
-                target: "https://pay.jx3box.com/api/",
                 onProxyReq: function(request) {
                     request.setHeader("origin", "");
                 },
