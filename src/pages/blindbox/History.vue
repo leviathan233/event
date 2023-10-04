@@ -1,16 +1,16 @@
 <template>
     <div class="m-history-content">
-        <el-table class="m-table-box" :data="list" v-loading="loading">
+        <el-table class="m-table-box" :data="list" align="left" v-loading="loading">
             <el-table-column prop="created_at" label="抽奖时间"></el-table-column>
-            <el-table-column prop="chance_count" label="抽奖次数" width="80px"></el-table-column>
-            <el-table-column label="状态">
+            <el-table-column prop="chance_count" width="140px" label="抽奖次数"></el-table-column>
+            <el-table-column label="状态" width="140px">
                 <template slot-scope="scope">
                     <el-tag :type="scope.row.status == 2 ? 'success' : 'info'">
                         {{ scope.row.status == 2 ? "中奖" : "未中奖" }}
                     </el-tag>
                 </template>
             </el-table-column>
-            <el-table-column>
+            <el-table-column >
                 <template slot-scope="scope">
                     <el-button size="mini" v-if="scope.row.status == 2" @click="look(scope.row.id)">
                         查看详情
@@ -80,8 +80,32 @@ export default {
 
 <style lang="less">
 .m-history-content {
-    .cell,
-    .m-archive-pages {
+    padding: 0px 40px;
+    .has-gutter {
+        th {
+            &:last-child{
+                .cell {
+                    text-align: right;
+                }
+            }
+        }
+        .cell {
+            text-align: left;
+        }
+    }
+    tbody {
+        td {
+            &:last-child{
+                .cell {
+                    text-align: right;
+                }
+            }
+        }
+        .cell {
+            text-align: left;
+        }
+    }
+    .cell,.m-archive-pages {
         .x;
     }
     .el-pagination.is-background .btn-next,
