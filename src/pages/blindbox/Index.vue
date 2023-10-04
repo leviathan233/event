@@ -125,21 +125,19 @@
         </div>
         <div class="m-goods" :class="{ active: hasPrize }">
             <div class="m-item">
-                <template v-if="myPrizes.length">
-                    <div class="u-item box" v-for="(item, i) in myPrizes" :key="i">
-                        <template v-if="item.prize_type == 'vip_asset'">
-                            <img class="u-img" :src="`${__imgRoot}points.png`" />
-                            <span>{{ item.vip_asset_once_give + asset[item.vip_asset_type] }}</span>
-                        </template>
-                        <template v-else>
-                            <img class="u-img" :src="item.goods.goods_images[0]" />
-                            <span>{{ item.goods.title }}</span>
-                        </template>
-                    </div>
-                </template>
-                <div class="u-item box" v-if="!history && !myPrizes.length">
-                    <img class="u-img" :src="`${__imgRoot}thanks.png`" />
-                    <span>感谢参与</span>
+                <div class="u-item box" v-for="(item, i) in myPrizes" :key="i">
+                    <template v-if="item.prize_type == 'vip_asset'">
+                        <img class="u-img" :src="`${__imgRoot}points.png`" />
+                        <span>{{ item.vip_asset_once_give + asset[item.vip_asset_type] }}</span>
+                    </template>
+                    <template v-if="item.prize_type == 'thanks'">
+                        <img class="u-img" :src="`${__imgRoot}thanks.png`" />
+                        <span>感谢参与</span>
+                    </template>
+                    <template v-if="item.prize_type == 'mall_goods'">
+                        <img class="u-img" :src="item.goods.goods_images[0]" />
+                        <span>{{ item.goods.title }}</span>
+                    </template>
                 </div>
             </div>
             <img :src="`${__imgRoot}${history ? 'ok' : 'get'}.png`" class="u-get" alt="拿下" @click="closePrize" />
@@ -346,6 +344,16 @@ export default {
             if (!show) this.hasPrize = true;
             getMyLucky(id).then((res) => {
                 this.myPrizes = res.data?.data.prizes || [];
+                if (show) {
+                    const prizeLength = res.data?.data?.prizes?.length || 0;
+                    const thanksLength =  res.data?.data.chance_count - prizeLength;
+                    const thanksPrizes = new Array(thanksLength).fill({prize_type: 'thanks'});
+                    this.myPrizes = this.myPrizes.concat(thanksPrizes);
+                    // 不要随机排序就把下面这行删掉
+                    this.myPrizes.sort(function() {
+                        return (0.5-Math.random());
+                    });
+                }
             });
         },
         // 关闭奖品弹窗
