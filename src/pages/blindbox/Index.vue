@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <!-- 抽奖按钮 -->
-                    <div class="m-lottery">
+                    <div class="m-lottery" v-if="draw.length">
                         <div class="m-mark" @click="toLogin" v-if="!isLogin"></div>
                         <img
                             :src="`${__imgRoot}refresh.svg`"
@@ -86,18 +86,18 @@
                         />
                         <div
                             class="m-random u-img"
-                            :class="{ disabled: !activeList.length || points < draw[1] }"
+                            :class="{ disabled: !activeList.length || points < draw[0][1] }"
                             @click="openBox"
                         >
-                            <span class="u-price"> x {{ draw[1] }}</span>
+                            <span class="u-price"> x {{ draw[0][0] }}</span>
                         </div>
                         <div
                             class="m-open u-img"
-                            :class="{ disabled: !activeList.length || points < draw[10] }"
+                            :class="{ disabled: !activeList.length || points < draw[1][1] }"
                             @click="openBox('all')"
                         >
-                            <span class="u-price u-discount"> x {{ draw[10] }}</span>
-                            <span class="u-price"> x {{ draw[1] * 10 }}</span>
+                            <span class="u-price u-discount"> x {{ draw[1][1] }}</span>
+                            <span class="u-price"> x {{ draw[0][1] * 10 }}</span>
                         </div>
                         <!-- 中奖记录 -->
                         <div class="m-history box u-img" :class="history ? 'history' : 'close'">
@@ -151,7 +151,7 @@ const KEY = "blindbox";
 import User from "@jx3box/jx3box-common/js/user";
 import { getTopic } from "@/service/topic";
 import { getBlindBox, goodLucky, getMyLucky } from "@/service/pay";
-import { cloneDeep, debounce } from "lodash";
+import { cloneDeep, debounce, zip } from "lodash";
 import History from "./History.vue";
 import { __Root } from "@jx3box/jx3box-common/data/jx3box.json";
 export default {
@@ -237,9 +237,6 @@ export default {
             getTopic(KEY).then((res) => {
                 this.raw = res.data.data;
                 this.ID = ~~this.data.ID[0].title;
-                this.draw = this.data.draw.reduce((acc, cur) => {
-                    return { ...acc, [cur.title]: cur.desc };
-                }, {});
                 this.ID &&
                     getBlindBox(this.ID).then((res) => {
                         const data = res.data.data;
@@ -247,6 +244,7 @@ export default {
                             point: `${this.__imgRoot}points.png`,
                             boxcoin: `${this.__imgRoot}boxcoin.png`,
                         };
+                        this.draw = zip(data.allow_once_try_count, data.allow_once_try_count_cost_points);
                         this.prizeList = data.prize.map((item) => {
                             if (item.prize_type != "mall_goods" && asset[item.vip_asset_type])
                                 return { img: asset[item.vip_asset_type] };
@@ -277,7 +275,6 @@ export default {
         // 获取积分
         myPoints() {
             User.getAsset().then((res) => {
-                console.log(res);
                 this.points = res?.points || 0;
             });
         },
@@ -346,12 +343,12 @@ export default {
                 this.myPrizes = res.data?.data.prizes || [];
                 if (show) {
                     const prizeLength = res.data?.data?.prizes?.length || 0;
-                    const thanksLength =  res.data?.data.chance_count - prizeLength;
-                    const thanksPrizes = new Array(thanksLength).fill({prize_type: 'thanks'});
+                    const thanksLength = res.data?.data.chance_count - prizeLength;
+                    const thanksPrizes = new Array(thanksLength).fill({ prize_type: "thanks" });
                     this.myPrizes = this.myPrizes.concat(thanksPrizes);
                     // 不要随机排序就把下面这行删掉
-                    this.myPrizes.sort(function() {
-                        return (0.5-Math.random());
+                    this.myPrizes.sort(function () {
+                        return 0.5 - Math.random();
                     });
                 }
             });
