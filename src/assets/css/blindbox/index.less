@@ -185,9 +185,7 @@
                 .flex;
                 .m-item {
                     .size(190px);
-                    flex-shrink: 0;
-                    border: 10px double #555;
-                    background-color: #24292e;
+                    flex-shrink: 0; 
                     box-sizing: border-box;
                 }
             }
@@ -378,8 +376,7 @@
     }
 }
 .drop(@n, @i: 1) when (@i =< @n) {
-    .u-img-@{i} {
-        opacity: 0;
+    .u-img-@{i} { 
         animation: drop 1s ease-in (0.1s * @i) forwards;
     }
     .drop(@n, (@i + 1));
