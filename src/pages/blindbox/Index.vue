@@ -250,6 +250,13 @@ export default {
                                 return { img: asset[item.vip_asset_type] };
                             return { id: item.mall_goods.id, img: item.mall_goods.goods_images[0] };
                         });
+                        const userLevelLimit = data.user_level_limit;
+                        const userLevel = User.getLevel(1)
+                        if (userLevelLimit > userLevel) {
+                            this.$alert('很抱歉，您的用户等级不足','无法进行当前活动',{
+                                type: "error",
+                            })
+                        }
                         this.refreshBox();
                     });
             });
